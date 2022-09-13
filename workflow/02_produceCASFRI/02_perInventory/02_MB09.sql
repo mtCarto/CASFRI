@@ -29,7 +29,7 @@ DELETE FROM casfri50.cas_all WHERE left(cas_id, 4) = 'MB09';
 
 -- Add translated ones
 INSERT INTO casfri50.cas_all --
-SELECT * FROM TT_Translate_mb01_cas('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
+SELECT * FROM TT_Translate_mb09_cas('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
 
 
 ------------------------
@@ -44,7 +44,7 @@ DELETE FROM casfri50.dst_all WHERE left(cas_id, 4) = 'MB09';
 
 -- Add translated ones
 INSERT INTO casfri50.dst_all --
-SELECT * FROM TT_Translate_mb01_dst('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
+SELECT * FROM TT_Translate_mb09_dst('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
 
 
 ------------------------
@@ -59,7 +59,7 @@ DELETE FROM casfri50.eco_all WHERE left(cas_id, 4) = 'MB09';
 
 -- Add translated ones
 INSERT INTO casfri50.eco_all --
-SELECT * FROM TT_Translate_mb01_eco('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
+SELECT * FROM TT_Translate_mb09_eco('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
 
 
 ------------------------
@@ -96,7 +96,7 @@ DELETE FROM casfri50.nfl_all WHERE left(cas_id, 4) = 'MB09';
 SELECT TT_CreateMappingView('rawfri', 'mb09', 2, 'mb_fri2', 1);
 
 INSERT INTO casfri50.nfl_all --
-SELECT * FROM TT_Translate_mb01_nfl('rawfri', 'mb09_l2_to_mb_fri2_l1_map');
+SELECT * FROM TT_Translate_mb09_nfl('rawfri', 'mb09_l2_to_mb_fri2_l1_map');
 
 
 ------------------------
@@ -111,7 +111,7 @@ DELETE FROM casfri50.geo_all WHERE left(cas_id, 4) = 'MB09';
 
 -- Add translated ones
 INSERT INTO casfri50.geo_all --
-SELECT * FROM TT_Translate_mb01_geo('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
+SELECT * FROM TT_Translate_mb09_geo('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
 
 --------------------------------------------------------------------------
 -- Check
