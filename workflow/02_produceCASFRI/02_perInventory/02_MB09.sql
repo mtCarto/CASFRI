@@ -35,16 +35,18 @@ SELECT * FROM TT_Translate_mb09_cas('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
 ------------------------
 -- DST
 ------------------------
-SELECT TT_Prepare('translation', 'mb_fri02_dst', '_mb09_dst', 'ab_avi01_dst');
+-- MB09 has no disturbance data this will translate 0 rows
 
-SELECT TT_CreateMappingView('rawfri', 'mb09', 'mb_fri2');
-
--- Delete existing entries
-DELETE FROM casfri50.dst_all WHERE left(cas_id, 4) = 'MB09';
-
--- Add translated ones
-INSERT INTO casfri50.dst_all --
-SELECT * FROM TT_Translate_mb09_dst('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
+--SELECT TT_Prepare('translation', 'mb_fri02_dst', '_mb09_dst', 'ab_avi01_dst');
+--
+--SELECT TT_CreateMappingView('rawfri', 'mb09', 'mb_fri2');
+--
+---- Delete existing entries
+--DELETE FROM casfri50.dst_all WHERE left(cas_id, 4) = 'MB09';
+--
+---- Add translated ones
+--INSERT INTO casfri50.dst_all --
+--SELECT * FROM TT_Translate_mb09_dst('rawfri', 'mb09_l1_to_mb_fri2_l1_map');
 
 
 ------------------------
