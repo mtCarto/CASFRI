@@ -7803,3 +7803,28 @@ RETURNS boolean AS $$
     END IF;
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+
+-- todo replace this with a validation function that can handle the '.' char, functions in translation table can't catch it.
+-- todo isInt check will stop translon when it encouters .
+-------------------------------------------------------------------------------
+-- TT_mb09_species_contains
+--
+-- species text - string containing species and percent. Eg 'BS8JP2'
+--
+-- Check if species string contains values non-alphanumeric characters eg. 'BS.JP2' should return false
+------------------------------------------------------------
+-- DROP FUNCTION IF EXISTS TT_mb09_species_contains(text, text, text, text);
+CREATE OR REPLACE FUNCTION TT_mb09_species_valid(
+  species text,
+)
+RETURNS boolean AS $$
+  DECLARE
+    _match boolean;
+  BEGIN
+      IF species LIKE '%.%'
+        return FALSE
+      ELSE
+        return TRUE
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
