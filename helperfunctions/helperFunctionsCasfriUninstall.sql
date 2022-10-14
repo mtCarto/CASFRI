@@ -65,6 +65,7 @@ DROP FUNCTION IF EXISTS TT_yt_yvi02_disturbance_mapText(text, text, text, text, 
 DROP FUNCTION IF EXISTS TT_yt_yvi02_disturbance_notNull(text, text, text, text, text);
 DROP FUNCTION IF EXISTS TT_yt_yvi02_disturbance_hasCountOfLayers(text, text, text, text);
 DROP FUNCTION IF EXISTS TT_fim_species_count_validate(text, text);
+DROP FUNCTION IF EXISTS TT_mb_mb03_disturbance_hasCountOfNotNull(text, text);
 -------------------------------------------------------------------------------
 -- ROW_TRANSLATION_RULE functions
 -------------------------------------------------------------------------------
@@ -154,6 +155,7 @@ DROP FUNCTION IF EXISTS TT_yt_yvi02_disturbance_copyText(text, text, text, text,
 DROP FUNCTION IF EXISTS TT_yt_yvi02_disturbance_copyInt(text, text, text, text, text);
 DROP FUNCTION IF EXISTS TT_yt_yvi02_disturbance_matchList(text, text, text, text, text, text);
 DROP FUNCTION IF EXISTS TT_nt_lyr_layer_translation(text, text, text, text, text, text);
+DROP FUNCTION IF EXISTS TT_mb_mb03_map_disturbance(text, text, text);
 -------------------------------------------------------------------------------
 -- Generic functions
 -------------------------------------------------------------------------------
