@@ -14,12 +14,12 @@
 
 source ./common.sh
 
-srcInventoryID=MB13
+srcInventoryID=MB10
 
 srcFileName=FRIFLI_FiveYearReports_2010_2016_2021
 srcFullPath="$friDir/MB/$srcInventoryID/data/inventory/$srcFileName.gdb"
 
-destInventoryID=MB10
+destInventoryID=MB13
 gdbTableName=MB_FRIFLI_Updatedto2010_v9WDriveCopy
 fullTargetTableName=$targetFRISchema.mb13
 
