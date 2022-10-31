@@ -32,5 +32,5 @@ fullTargetTableName=$targetFRISchema.mb10
 -nln $fullTargetTableName $layer_creation_options $other_options \
 -nlt PROMOTE_TO_MULTI \
 -sql "SELECT *, '$srcFileName' AS src_filename, '$destInventoryID' AS inventory_id, mu_id AS mu_fli,
-            yearphoto as yearphoto_fli, mu_old as poly_id FROM $gdbTableName WHERE inv_type = 'FLI'" \
+            yearphoto as yearphoto_fli FROM $gdbTableName WHERE inv_type = 'FLI'" \
 -progress $overwrite_tab
