@@ -30,7 +30,7 @@ fullTargetTableName=$targetFRISchema.mb13
 "$gdalFolder/ogr2ogr" \
 -f "PostgreSQL" "$pg_connection_string" "$srcFullPath" "$gdbTableName" \
 -nln $fullTargetTableName $layer_creation_options $other_options \
--nlt PROMOTE_TO_MULTI \
+-nlt PROMOTE_TO_MULTI -nlt CONVERT_TO_LINEAR \
 -sql "SELECT *, '$srcFileName' AS src_filename, '$destInventoryID' AS inventory_id, mu_id AS mu_fli,
            yearphoto as fri_yr, mu_id as tile, shape_area as area, cc_frifli as crown10,
            productivity as subtype, ht_sum as height, spp_sum as species, origin_sum as year_org
