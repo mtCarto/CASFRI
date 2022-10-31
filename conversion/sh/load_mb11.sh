@@ -35,5 +35,5 @@ MB_subFolder=MB/$inventoryID/data/inventory/
 -sql "SELECT *, '$srcFileName' AS src_filename, '$destInventoryID' AS inventory_id, mu_id AS mu_fli,
       yearphoto as fri_yr, mu_id as tile, shape_area as area, cc_frifli as crown10,
       productivity as subtype, ht_sum as height, spp_sum as species, origin_sum as year_org
-      FROM $gdbTableName WHERE inv_type = 'FRI'" \
+      FROM $gdbTableName WHERE fri_fli = 'FRI'" \
 -progress $overwrite_tab
