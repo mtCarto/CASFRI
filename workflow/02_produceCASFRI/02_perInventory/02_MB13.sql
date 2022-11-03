@@ -31,17 +31,8 @@ SELECT * FROM TT_Translate_mb13_cas('rawfri', 'mb13_l1_to_mb_fri3_l1_map');
 ------------------------
 -- DST
 ------------------------
-SELECT TT_Prepare('translation', 'mb_fri03_dst', '_mb13_dst', 'ab_avi01_dst');
 
-SELECT TT_CreateMappingView('rawfri', 'mb13', 'mb_fri3');
-
--- Delete existing entries
--- DELETE FROM casfri50.dst_all WHERE left(cas_id, 4) = 'MB13';
-
--- Add translated ones
-INSERT INTO casfri50.dst_all --
-SELECT * FROM TT_Translate_mb13_dst('rawfri', 'mb13_l1_to_mb_fri3_l1_map');
-
+-- No disturbance data recorded in source file
 
 ------------------------
 -- ECO
