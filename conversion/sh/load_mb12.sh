@@ -35,3 +35,5 @@ fullTargetTableName=$targetFRISchema.mb12
 -sql "SELECT *, '$srcFileName' AS src_filename, '$destInventoryID' AS inventory_id, mu_id AS mu_fli,
             yearphoto as yearphoto_fli FROM $gdbTableName WHERE fri_fli = 'FLI'" \
 -progress $overwrite_tab
+
+"$gdalFolder/ogrinfo" "$pg_connection_string" -sql "UPDATE $fullTargetTableName SET cc = NULL where cc = ' '";
