@@ -45,7 +45,7 @@ SELECT inventory_id, jurisdiction, owner_type, owner_name, standard_type, standa
 FROM translation.inventory_list_cas05
 WHERE inventory_id IN ('AB03', 'AB06', 'AB07', 'AB08', 'AB10', 'AB11', 'AB16', 'AB21', 'AB24', 'AB25', 'AB27', 'AB29', 'AB30', 'AB31', 'AB32', 'AB34', 
                        'BC04', 'BC08', 'BC10', 'BC11', 'BC12', 'BC13', 
-                       'MB01', 'MB02', 'MB04', 'MB05', 'MB06', 'MB07', 'MB08',
+                       'MB01', 'MB02', 'MB03','MB04', 'MB05', 'MB06', 'MB07', 'MB08', 'MB10', 'MB11', 'MB12', 'MB13'
                        'NB01', 'NB02', 'NL01', 'NL02', 'NS01', 'NS02', 'NS03', 'NT01', 'NT03', 
                        'ON01', 'ON02', 'PC01', 'PC02', 'PE01', 
                        'QC01', 'QC02', 'QC03', 'QC04', 'QC05', 'QC06', 'QC07', 
