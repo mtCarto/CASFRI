@@ -1582,6 +1582,7 @@ RETURNS text AS $$
                   WHEN rulelc = 'row_translation_rule_nt_lyr' THEN '-9997'
 				  WHEN rulelc = 'mb_fri_hasCountOfNotNull' THEN '-8886'
 				  WHEN rulelc = 'mb_mb03_disturbance_hascountofnotnull' THEN '-8888'
+				  WHEN rulelc = 'mb_fri03_isIntSubstring'          THEN '-9997'
 				  WHEN rulelc = 'nl_nli01_crown_closure_validation' THEN '-8886'
 				  WHEN rulelc = 'nl_nli01_height_validation' THEN '-8886'
 				  WHEN rulelc = 'nb_hasCountOfNotNull' THEN '-8886'
@@ -8385,6 +8386,81 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 
 -------------------------------------------------------------------------------
+-- TT_mb_fri03_matchLengthList
+--
+-- species_str - contain species and percentage values in a single str eg. BS6AS4 or BS10
+-- species_num - number of the CASFRI species , 1 - 10
+-- Basically a wrapper for TT_lengthMatchList verify species string has correct number of characters for parsing
+--  necessary since first species + percentage value can be 3 or 4 characters
+------------------------------------------------------------
+-- DROP FUNCTION IF EXISTS TT_mb_fri03_matchLengthList(text, text);
+CREATE OR REPLACE FUNCTION TT_mb_fri03_matchLengthList(
+  species_str text,
+  idx_list text
+)
+RETURNS boolean AS $$
+  BEGIN
+    IF length(species_str) = 4 THEN
+      RETURN TT_lengthMatchList(species_str, '{4}');
+    ELSE
+      RETURN TT_lengthMatchList(species_str, idx_list);
+    END IF;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-------------------------------------------------------------------------------
+-- TT_mb_fri03_isIntSubstring
+--
+-- species_str - contain species and percentage values in a single str eg. BS6AS4 or BS10
+-- start_char - character to start substring at
+-- forLeng - num of characters to include
+-- Basically a wrapper for TT_isIntSubstring verify species string has an integer number to translate to percentage
+--  necessary since first species + percentage value can be 3 or 4 characters
+------------------------------------------------------------
+-- DROP FUNCTION IF EXISTS TT_mb_fri03_isIntSubstring(text, text, text);
+CREATE OR REPLACE FUNCTION TT_mb_fri03_isIntSubstring(
+  species_str text,
+  start_char text,
+  forLeng text
+)
+RETURNS boolean AS $$
+  BEGIN
+    IF length(species_str) = 4 THEN
+      RETURN TT_isIntsubstring(species_str,3::text,2::text);
+    ELSE
+      RETURN TT_isIntsubstring(species_str, start_char, forLeng);
+    END IF;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-------------------------------------------------------------------------------
+-- TT_mb_fri03_substringMultiplyInt
+--
+-- species_str - contain species and percentage values in a single str eg. BS6AS4 or BS10
+-- start_char - character to start substring at
+-- forLeng - num of characters to include
+-- multiplier - num to mulitply by, 10 in this case
+-- Basically a wrapper for TT_substringMultiplyInt multiply integer number to translate to percentage
+--  necessary since first species + percentage value can be 3 or 4 characters
+------------------------------------------------------------
+-- DROP FUNCTION IF EXISTS TT_mb_fri03_substringMultiplyInt(text, text, text, text, text);
+CREATE OR REPLACE FUNCTION TT_mb_fri03_substringMultiplyInt(
+  species_str text,
+  start_char text,
+  forLeng text,
+  multiplier text
+)
+RETURNS int AS $$
+  BEGIN
+    IF length(species_str) = 4 THEN
+      RETURN TT_substringMultiplyInt(species_str,3::text,2::text, multiplier);
+    ELSE
+      RETURN TT_substringMultiplyInt(species_str, start_char, forLeng, multiplier);
+    END IF;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-------------------------------------------------------------------------------
 -- TT_mb_mb03_disturbance_notNull
 --
 -- dst_type1 to dst_type5 - contain year values for fire_yr, blowdown_yr, cut_yr, regen_yr, and ftg_sp_yr
@@ -8394,12 +8470,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 ------------------------------------------------------------
 -- DROP FUNCTION IF EXISTS TT_mb_mb03_disturbance_notNull(text, text, text, text, text,text);
 CREATE OR REPLACE FUNCTION TT_mb_mb03_disturbance_hasCountOfNotNull(
-  dst_type1 text,
-  dst_type2 text,
-  dst_type3 text,
-  dst_type4 text,
-  dst_type5 text,
-  dist_num text
+    dst_type1 text,
+    dst_type2 text,
+    dst_type3 text,
+    dst_type4 text,
+    dst_type5 text,
+    dist_num text
 )
 RETURNS boolean AS $$
   BEGIN

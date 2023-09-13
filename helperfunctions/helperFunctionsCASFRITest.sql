@@ -184,7 +184,10 @@ WITH test_nb AS (
 	SELECT 'TT_yt_yvi02_disturbance_copyInt'::text function_tested,          136 maj_num,  1 nb_test UNION ALL
 	SELECT 'TT_yt_yvi02_disturbance_hasCountOfLayers'::text function_tested, 137 maj_num,  4 nb_test UNION ALL
 	SELECT 'TT_nt_lyr_layer_translation'::text function_tested,              138 maj_num,  6 nb_test UNION ALL
-  SELECT 'TT_pe_pei02_countOfNotNull'::text function_tested,               139 maj_num,  9 nb_test
+  SELECT 'TT_pe_pei02_countOfNotNull'::text function_tested,               139 maj_num,  9 nb_test UNION ALL
+  SELECT 'TT_mb_fri03_matchLengthList'::text function_tested,               140 maj_num,  2 nb_test UNION ALL
+  SELECT 'TT_mb_fri03_isIntSubstring'::text function_tested,               141 maj_num,  3 nb_test UNION ALL
+  SELECT 'TT_mb_fri03_substringMultiplyInt'::text function_tested,         142 maj_num,  3 nb_test
 ),
 test_series AS (
 -- Build a table of function names with a sequence of number for each function to be tested
@@ -4686,8 +4689,61 @@ SELECT '139.9'::text number,
        'Test all spec and nfl'::text description,
        TT_pe_pei02_countOfNotNull('BS', 'AS', 'MA', 'BF', 'WE', 'SO', 'NULL', '2') = 2 passed
 ---------------------------------------------------------
-	
-) AS b 
+ -- TT_mb_fri03_matchLengthList
+---------------------------------------------------------
+UNION ALL
+SELECT '140.1'::text number,
+       'TT_mb_fri03_matchLengthList'::text function_tested,
+       'Test single species string length match'::text description,
+       TT_mb_fri03_matchLengthList('BS10', '{3,6,9,12}') passed
+---------------------------------------------------------
+UNION ALL
+SELECT '140.2'::text number,
+       'TT_mb_fri03_matchLengthList'::text function_tested,
+       'Test multiple species string length match'::text description,
+       TT_mb_fri03_matchLengthList('BS6MP4', '{3,6,9,12}') passed
+---------------------------------------------------------
+ -- TT_mb_fri03_isIntSubstring
+---------------------------------------------------------
+UNION ALL
+SELECT '141.1'::text number,
+       'TT_mb_fri03_isIntSubstring'::text function_tested,
+       'Test single species 100 percent is parsed'::text description,
+       TT_mb_fri03_isIntSubstring('BS10', '3', '1') passed
+---------------------------------------------------------
+UNION ALL
+SELECT '141.2'::text number,
+       'TT_mb_fri03_isIntSubstring'::text function_tested,
+       'Test multiple species first int is parsed'::text description,
+       TT_mb_fri03_isIntSubstring('BS6MP4', '3', '1') passed
+---------------------------------------------------------
+UNION ALL
+SELECT '141.3'::text number,
+       'TT_mb_fri03_isIntSubstring'::text function_tested,
+       'Test multiple species second int is parsed'::text description,
+       TT_mb_fri03_isIntSubstring('BS6MP4', '6', '1') passed
+---------------------------------------------------------
+ -- TT_mb_fri03_substringMultiplyInt
+---------------------------------------------------------
+UNION ALL
+SELECT '142.1'::text number,
+       'TT_mb_fri03_substringMultiplyInt'::text function_tested,
+       'Test single species 100 percent is parsed'::text description,
+       TT_mb_fri03_substringMultiplyInt('BS10', '3', '1','10') = 100 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.2'::text number,
+       'TT_mb_fri03_substringMultiplyInt'::text function_tested,
+       'Test first species 60 percent is parsed'::text description,
+       TT_mb_fri03_substringMultiplyInt('BS6MS4', '3', '1','10') = 60 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.3'::text number,
+       'TT_mb_fri03_substringMultiplyInt'::text function_tested,
+       'Test second species 40 percent is parsed'::text description,
+       TT_mb_fri03_substringMultiplyInt('BS6MS4', '6', '1','10') = 40 passed
+---------------------------------------------------------
+) AS b
 ON (a.function_tested = b.function_tested AND (regexp_split_to_array(number, '\.'))[2] = min_num)
 ORDER BY maj_num::int, min_num::int
 -- This last line has to be commented out, with the line at the beginning,

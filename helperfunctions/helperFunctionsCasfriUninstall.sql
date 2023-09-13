@@ -71,6 +71,9 @@ DROP FUNCTION IF EXISTS TT_yvi03_nat_non_veg_validation(text,text,text, text);
 DROP FUNCTION IF EXISTS TT_yvi03_nfl_soil_moisture_validation(text,text,text,text);
 DROP FUNCTION IF EXISTS TT_fim_species_count_validate(text, text);
 DROP FUNCTION IF EXISTS TT_mb_mb03_disturbance_hasCountOfNotNull(text, text);
+DROP FUNCTION IF EXISTS TT_mb_fri03_matchLengthList(text, text);
+DROP FUNCTION IF EXISTS TT_mb_fri03_isIntSubstring(text, text, text);
+DROP FUNCTION IF EXISTS TT_mb_fri03_substringMultiplyInt(text, text, text, text);
 -------------------------------------------------------------------------------
 -- ROW_TRANSLATION_RULE functions
 -------------------------------------------------------------------------------
