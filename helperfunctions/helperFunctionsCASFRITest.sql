@@ -4016,7 +4016,7 @@ UNION ALL
 SELECT '110.5'::text number,
        'TT_ab_photo_year_translation'::text function_tested,
        'Test post AB25 inventories check nulls'::text description,
-       TT_ab_photo_year_translation('AB26', NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, '2001') = 2001 passed
+       TT_ab_photo_year_translation('AB26', NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, '2001', '2001') = 2001 passed
 ---------------------------------------------------------
  -- TT_sk_sfv01_wetland_translation
 ---------------------------------------------------------
