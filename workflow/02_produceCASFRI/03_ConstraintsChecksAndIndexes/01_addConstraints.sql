@@ -436,36 +436,36 @@ FROM (SELECT *
 UNION ALL
 SELECT '2.22'::text number,
        'dst_all' target_table,
-       'Ensure DST table DIST_YEAR_1 is greater than 1000 and smaller than 2020' description, 
+       'Ensure DST table DIST_YEAR_1 is greater than 1000 and smaller than 2024' description,
        passed, cstr_query
 FROM (SELECT * 
       FROM TT_AddConstraint('casfri50', 'dst_all', 'CHECK', 
-                        ARRAY['dist_year_1_greater_than_1000_and_smaller_2020', 
-                              '(1000 <= dist_year_1 AND dist_year_1 <= 2020) OR
+                        ARRAY['dist_year_1_greater_than_1000_and_smaller_2024',
+                              '(1000 <= dist_year_1 AND dist_year_1 <= 2024) OR
                                dist_year_1 = ANY(TT_IsMissingOrInvalidRange())
                               ']) AS (passed boolean, cstr_query text)) foo
 -------------------------------------------------------
 UNION ALL
 SELECT '2.23'::text number,
        'dst_all' target_table,
-       'Ensure DST table DIST_YEAR_2 is greater than 1900 and smaller than 2020' description, 
+       'Ensure DST table DIST_YEAR_2 is greater than 1900 and smaller than 2024' description,
        passed, cstr_query
 FROM (SELECT * 
       FROM TT_AddConstraint('casfri50', 'dst_all', 'CHECK', 
-                        ARRAY['dist_year_2_greater_than_1900_and_smaller_2020', 
-                              '(1900 <= dist_year_2 AND dist_year_2 <= 2020) OR 
+                        ARRAY['dist_year_2_greater_than_1900_and_smaller_2024',
+                              '(1900 <= dist_year_2 AND dist_year_2 <= 2024) OR
                                dist_year_2 = ANY(TT_IsMissingOrInvalidRange())
                               ']) AS (passed boolean, cstr_query text)) foo
 -------------------------------------------------------
 UNION ALL
 SELECT '2.24'::text number,
        'dst_all' target_table,
-       'Ensure DST table DIST_YEAR_3 is greater than 1900 and smaller than 2020' description, 
+       'Ensure DST table DIST_YEAR_3 is greater than 1900 and smaller than 2024' description,
        passed, cstr_query
 FROM (SELECT * 
       FROM TT_AddConstraint('casfri50', 'dst_all', 'CHECK', 
-                        ARRAY['dist_year_3_greater_than_1900_and_smaller_2020', 
-                              '(1900 <= dist_year_3 AND dist_year_3 <= 2020) OR
+                        ARRAY['dist_year_3_greater_than_1900_and_smaller_2024',
+                              '(1900 <= dist_year_3 AND dist_year_3 <= 2024) OR
                                 dist_year_3 = ANY(TT_IsMissingOrInvalidRange())
                               ']) AS (passed boolean, cstr_query text)) foo
 -------------------------------------------------------
