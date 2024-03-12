@@ -5390,7 +5390,7 @@ RETURNS int AS $$
     _short_percent = (regexp_split_to_array(_code, '\s+'))[2]::int;
     RETURN CASE WHEN (sp_string ~ '^[a-zA-Z]+\s*0{1,2}$') AND _short_percent = 0 THEN 100 -- cases 'x 0', 'xx 0' and 'x 00'
                 WHEN _short_percent > 100 THEN _short_percent / 10 -- case when _short_percent > 100
-                WHEN (sp_string ~ '[02-9][0-9]') THEN _short_percent -- case when two digit value other than 10 are found
+                WHEN (sp_string ~ '[0-9][0-9]') THEN _short_percent -- case when two digit value other than 10 are found
                 WHEN _short_percent = 10 THEN 10 -- case 10
                 ELSE _short_percent * 10
            END;
