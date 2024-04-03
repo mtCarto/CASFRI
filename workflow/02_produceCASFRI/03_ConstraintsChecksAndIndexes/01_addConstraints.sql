@@ -1075,12 +1075,12 @@ FROM (SELECT *
 UNION ALL
 SELECT '4.40'::text number,
        'lyr_all' target_table,
-       'Issue #753. Some rows produce -3333. Ensure LYR table STRUCTURE_RANGE is greater than 0 and smaller than 100' description, 
+       'Issue #753. Some rows produce -3333. Ensure LYR table STRUCTURE_RANGE is greater than 0 and smaller than or equal to 100' description,
        passed, cstr_query
 FROM (SELECT * 
       FROM TT_AddConstraint('casfri50', 'lyr_all', 'CHECK', 
                         ARRAY['structure_range_between_0_and_100', 
-                              '(structure_range > 0 AND structure_range < 100) OR 
+                              '(structure_range > 0 AND structure_range <= 100) OR
                                structure_range = ANY(TT_IsMissingOrInvalidRange())
                               ']) AS (passed boolean, cstr_query text)) foo
 -------------------------------------------------------
