@@ -186,7 +186,8 @@ WITH test_nb AS (
 	SELECT 'TT_nt_lyr_layer_translation'::text function_tested,              138 maj_num,  6 nb_test UNION ALL
   SELECT 'TT_pe_pei01_dist_type_length_validation'::text function_tested,  139 maj_num,  4 nb_test UNION ALL
   SELECT 'TT_pe_pei01_has_nfl_info'::text function_tested,                 140 maj_num,  4 nb_test
-
+   SELECT 'TT_mb_fri03_getSpeciesPer1'::text function_tested,               141 maj_num,  5 nb_test UNION ALL
+   SELECT 'TT_mb_fri03_species_validation'::text function_tested,               142 maj_num,  9 nb_test
 ),
 test_series AS (
 -- Build a table of function names with a sequence of number for each function to be tested
@@ -4719,7 +4720,98 @@ SELECT '140.4'::text number,
        'Test greater than length 4'::text description,
        TT_pe_pei01_has_nfl_info('PE02', NULL, 'FOR', NULL, NULL) = FALSE passed
 ---------------------------------------------------------
-) AS b 
+<<<<<<< HEAD
+=======
+---------------------------------------------------------
+-- TT_mb_fri03_getSpeciesPer1
+---------------------------------------------------------
+UNION ALL
+SELECT '141.1'::text number,
+       'TT_mb_fri03_getSpeciesPer1'::text function_tested,
+       'Test single species with unspecified percentage'::text description,
+       TT_mb_fri03_getSpeciesPer1('TR') = 100 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '141.2'::text number,
+       'TT_mb_fri03_getSpeciesPer1'::text function_tested,
+       'Test single species with 100%'::text description,
+       TT_mb_fri03_getSpeciesPer1('TR10') = 100 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '141.3'::text number,
+       'TT_mb_fri03_getSpeciesPer1'::text function_tested,
+       'Test multiple species'::text description,
+       TT_mb_fri03_getSpeciesPer1('TR9FL1') = 90 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '141.4'::text number,
+       'TT_mb_fri03_getSpeciesPer1'::text function_tested,
+       'Test single species with non 100%'::text description,
+       TT_mb_fri03_getSpeciesPer1('TR9') IS NULL passed
+ ---------------------------------------------------------
+UNION ALL
+SELECT '141.5'::text number,
+       'TT_mb_fri03_getSpeciesPer1'::text function_tested,
+       'Test invalid first species'::text description,
+       TT_mb_fri03_getSpeciesPer1('T1') IS NULL passed
+ ---------------------------------------------------------
+ -- TT_mb_fri03_species_validation
+---------------------------------------------------------
+UNION ALL
+SELECT '142.1'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test single species with unspecified percentage'::text description,
+       TT_mb_fri03_species_validation('TR', 1) = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.2'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test single species with 100%'::text description,
+       TT_mb_fri03_species_validation('TR10', 1) = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.3'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test first of multiple species'::text description,
+       TT_mb_fri03_species_validation('TR9FL1', 1) = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.4'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test second species'::text description,
+       TT_mb_fri03_species_validation('TR9FL1', 2) = TRUE passed
+ ---------------------------------------------------------
+UNION ALL
+SELECT '142.5'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test third of multiple species'::text description,
+       TT_mb_fri03_species_validation('JP6TR2TL1PL1', 3) = TRUE passed
+ ---------------------------------------------------------
+UNION ALL
+SELECT '142.6'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test fourth species doesnt exist'::text description,
+       TT_mb_fri03_species_validation('JP7TR2TL1', 4) = FALSE passed
+ ---------------------------------------------------------
+UNION ALL
+SELECT '142.7'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test fifth species invalid percentage'::text description,
+       TT_mb_fri03_species_validation('JP5TR2TL1PL1TSS', 5) = FALSE passed
+ ---------------------------------------------------------
+UNION ALL
+SELECT '142.8'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test sixth species invalid species code'::text description,
+       TT_mb_fri03_species_validation('JP4TR2TL1PL1TS1W11', 6) = FALSE passed
+ ---------------------------------------------------------
+UNION ALL
+SELECT '142.9'::text number,
+       'TT_mb_fri03_species_validation'::text function_tested,
+       'Test empty species'::text description,
+       TT_mb_fri03_species_validation('', 1) = FALSE passed
+ ---------------------------------------------------------
+) AS b
 ON (a.function_tested = b.function_tested AND (regexp_split_to_array(number, '\.'))[2] = min_num)
 ORDER BY maj_num::int, min_num::int
 -- This last line has to be commented out, with the line at the beginning,
