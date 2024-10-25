@@ -36,5 +36,4 @@ fullTargetTableName=$targetFRISchema.$inventoryID
 
 "$gdalFolder/ogrinfo" "$pg_connection_string" -sql "ALTER TABLE $fullTargetTableName ALTER COLUMN stdlab TYPE TEXT; UPDATE $fullTargetTableName SET stdlab = '' WHERE stdlab IS NULL;"
 
-
 source ./common_postprocessing.sh
