@@ -1616,6 +1616,7 @@ RETURNS text AS $$
                   WHEN rulelc = 'ns_nsi01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'pe_pei01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'pe_pei02_wetland_validation' THEN 'NOT_APPLICABLE'
+                  WHEN rulelc = 'pe_pei_dist_type_length_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'nt_fvi01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'sk_utm01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'sk_sfv01_wetland_validation' THEN 'NOT_APPLICABLE'
@@ -6340,6 +6341,30 @@ RETURNS text AS $$
     END IF;
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- TT_pe_pei_dist_type_length_validation
+--
+-- dist_type text
+-- landtype text
+-- substring_start text
+--
+-- Intended to validate dist_type_2 length for PEI. 
+-- If the inventory records two disturbance types in one field, then the substring start will be equal to 3. 
+-- If this is the case, and the length isnt 4, then the disturbance type isn't applicable and will return false.
+-- Returns true otherwise
+-------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION TT_pe_pei_dist_type_length_validation(
+  dist_type TEXT,
+  landtype TEXT,
+  substring_start TEXT
+)
+RETURNS BOOLEAN AS $$
+	BEGIN
+		RETURN length(tt_coalesceText('{'||dist_type||', '||landtype||'}')) = 4 OR substring_start = 1::TEXT;
+	 END;
+$$ LANGUAGE plpgsql STABLE;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
