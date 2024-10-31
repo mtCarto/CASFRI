@@ -4742,6 +4742,36 @@ $$ LANGUAGE plpgsql;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
+-- TT_pe_pei01_has_nfl_info
+-------------------------------------------------------------------------------
+-- inventory_id 
+-- class1 
+-- landuse  
+-- subuse
+-- landtype 
+--
+-- For PE01, determines if landtype matches list.
+-- For other PEI inventories, calls main hasNFLInfo function
+CREATE OR REPLACE FUNCTION TT_pe_pei01_has_nfl_info(
+  inventory_id TEXT, 
+  class1 TEXT, 
+  landuse TEXT, 
+  subuse TEXT,
+  landtype TEXT
+)
+RETURNS boolean AS $$
+  BEGIN
+    IF inventory_id = 'PE01'
+    THEN
+    	RETURN tt_matchList(landtype,'{''SO'',''SD'',''WW'',''FL'',''CL'',''WF'',''PL'',''RN'',''RD'',''RR'',''AG'',''EP'',''UR'',''BO''}');
+    ELSE
+    	RETURN tt_hasNFLInfo(inventory_id, ARRAY['all_nfl', NULL, NULL]::TEXT, ARRAY[class1, landuse, subuse, NULL, NULL]::TEXT);
+    END IF;
+  END;
+$$ LANGUAGE plpgsql;
+
+
+-------------------------------------------------------------------------------
 -- TT_row_translation_rule_nt_lyr
 -------------------------------------------------------------------------------
 -- typeclas
@@ -6325,7 +6355,7 @@ CREATE OR REPLACE FUNCTION TT_pe_pei01_dist_type_length_validation(
 )
 RETURNS BOOLEAN AS $$
 	BEGIN
-		RETURN length(tt_coalesceText('{'||dist_type||', '||landtype||'}')) = 4 OR substring_start = 1::TEXT;
+		RETURN length(tt_coalesceText(ARRAY[dist_type,landtype]::TEXT)) = 4 OR substring_start = 1::TEXT;
 	 END;
 $$ LANGUAGE plpgsql STABLE;
 -------------------------------------------------------------------------------
