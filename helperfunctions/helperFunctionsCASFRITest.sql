@@ -187,7 +187,7 @@ WITH test_nb AS (
    SELECT 'TT_pe_pei02_countOfNotNull'::text function_tested,                139 maj_num,  9 nb_test UNION ALL
    SELECT 'TT_mb_fri03_getSpeciesPer1'::text function_tested,                140 maj_num,  5 nb_test UNION ALL
    SELECT 'TT_mb_fri03_species_validation'::text function_tested,            141 maj_num,  9 nb_test UNION ALL
-   SELECT 'TT_pe_pei_dist_type_length_validation'::text function_tested,     142 maj_num,  4 nb_test
+   SELECT 'TT_pe_pei01_dist_type_length_validation'::text function_tested,     142 maj_num,  4 nb_test
 ),
 test_series AS (
 -- Build a table of function names with a sequence of number for each function to be tested
@@ -3781,25 +3781,25 @@ UNION ALL
 SELECT '102.1'::text number,
        'TT_pe_pei01_wetland_translation'::text function_tested,
        'Basic pass 1'::text description,
-       TT_pe_pei01_wetland_translation('BO', '1', '2') = 'FORESTED' passed
+       TT_pe_pei01_wetland_translation('BO', '1', 999::TEXT, 999::TEXT, 999::TEXT, 999::TEXT, '2') = 'FORESTED' passed
 ---------------------------------------------------------
 UNION ALL
 SELECT '102.2'::text number,
        'TT_pe_pei01_wetland_translation'::text function_tested,
        'Fail due to dash in 4 letter code'::text description,
-       TT_pe_pei01_wetland_translation('BO', '1', '4') IS NULL passed
+       TT_pe_pei01_wetland_translation('BO', '1', 999::TEXT, 999::TEXT, 999::TEXT, 999::TEXT, '4') IS NULL passed
 ---------------------------------------------------------
 UNION ALL
 SELECT '102.3'::text number,
        'TT_pe_pei01_wetland_translation'::text function_tested,
        'Fail due to dash in 4 letter code'::text description,
-       TT_pe_pei01_wetland_translation('BO', '0', '2') = 'OPEN_NON_TREED_FRESHWATER' passed
+       TT_pe_pei01_wetland_translation('BO', '0', 999::TEXT, 999::TEXT, 999::TEXT, 999::TEXT, '2') = 'OPEN_NON_TREED_FRESHWATER' passed
 ---------------------------------------------------------
 UNION ALL
 SELECT '102.4'::text number,
        'TT_pe_pei01_wetland_translation'::text function_tested,
        'All null'::text description,
-       TT_pe_pei01_wetland_translation(NULL::text, NULL::text, NULL::text) IS NULL passed
+       TT_pe_pei01_wetland_translation(NULL::text, NULL::text, 999::TEXT, 999::TEXT, 999::TEXT, 999::TEXT, NULL::text) IS NULL passed
 ---------------------------------------------------------
  -- TT_pe_pei01_wetland_validation
 ---------------------------------------------------------
@@ -3807,13 +3807,13 @@ UNION ALL
 SELECT '103.1'::text number,
        'TT_pe_pei01_wetland_validation'::text function_tested,
        'Basic pass 1'::text description,
-       TT_pe_pei01_wetland_validation('BO', '1', '2') passed
+       TT_pe_pei01_wetland_validation('BO', '1', 999::TEXT, 999::TEXT, 999::TEXT, 999::TEXT, '2') passed
 ---------------------------------------------------------
 UNION ALL
 SELECT '103.2'::text number,
        'TT_pe_pei01_wetland_validation'::text function_tested,
        'All null'::text description,
-       TT_pe_pei01_wetland_validation(NULL::text, NULL::text, '2') IS FALSE passed
+       TT_pe_pei01_wetland_validation(NULL::text, NULL::text, 999::TEXT, 999::TEXT, 999::TEXT, 999::TEXT, '2') IS FALSE passed
 ---------------------------------------------------------
  -- TT_nt_fvi01_wetland_translation
 ---------------------------------------------------------
@@ -4781,27 +4781,27 @@ SELECT '141.9'::text number,
 ---------------------------------------------------------
 UNION ALL
 SELECT '142.1'::text number,
-       'TT_pe_pei_dist_type_length_validation'::text function_tested,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
        'Test substring start = 1'::text description,
-       TT_pe_pei_dist_type_length_validation('AB', 'CD', '1') = TRUE passed
+       TT_pe_pei01_dist_type_length_validation('AB', 'CD', '1') = TRUE passed
 ---------------------------------------------------------
 UNION ALL
 SELECT '142.2'::text number,
-       'TT_pe_pei_dist_type_length_validation'::text function_tested,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
        'Test substring start != 1 and length != 4'::text description,
-       TT_pe_pei_dist_type_length_validation('AB', 'CD', '3') = FALSE passed
+       TT_pe_pei01_dist_type_length_validation('AB', 'CD', '3') = FALSE passed
 ---------------------------------------------------------
 UNION ALL
 SELECT '142.3'::text number,
-       'TT_pe_pei_dist_type_length_validation'::text function_tested,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
        'Test coalesced and length 4'::text description,
-       TT_pe_pei_dist_type_length_validation(NULL, 'ABCD', '2') = TRUE passed
+       TT_pe_pei01_dist_type_length_validation(NULL, 'ABCD', '2') = TRUE passed
 ---------------------------------------------------------
 UNION ALL
 SELECT '142.4'::text number,
-       'TT_pe_pei_dist_type_length_validation'::text function_tested,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
        'Test greater than length 4'::text description,
-       TT_pe_pei_dist_type_length_validation('ABCDE', 'ABCD', '4') = FALSE passed
+       TT_pe_pei01_dist_type_length_validation('ABCDE', 'ABCD', '4') = FALSE passed
 ---------------------------------------------------------
 
        

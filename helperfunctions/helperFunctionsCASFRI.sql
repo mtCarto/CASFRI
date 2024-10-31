@@ -1615,7 +1615,7 @@ RETURNS text AS $$
                   WHEN rulelc = 'bc_vri01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'ns_nsi01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'pe_pei01_wetland_validation' THEN 'NOT_APPLICABLE'
-                  WHEN rulelc = 'pe_pei_dist_type_length_validation' THEN 'NOT_APPLICABLE'
+                  WHEN rulelc = 'pe_pei01_dist_type_length_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'nt_fvi01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'sk_utm01_wetland_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'sk_sfv01_wetland_validation' THEN 'NOT_APPLICABLE'
@@ -2104,30 +2104,8 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 --
 -- Return 4 character wetland code
 -------------------------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei01_wetland_code(text, text);
+--DROP FUNCTION IF EXISTS TT_pe_pei01_wetland_code(text, text, text, text, text, text);
 CREATE OR REPLACE FUNCTION TT_pe_pei01_wetland_code(
-  landtype text,
-  per1 text
-)
-RETURNS text AS $$
-  SELECT CASE
-           WHEN landtype='BO' AND NOT per1='0' THEN 'BFX-'
-           WHEN landtype='BO' AND per1='0' THEN 'BOX-'
-           WHEN landtype='SO' THEN 'SOX-'
-           WHEN landtype='SW' AND NOT per1='0' THEN 'STX-'
-           WHEN landtype='SW' AND per1='0' THEN 'SOX-'
-           ELSE NULL
-         END;
-$$ LANGUAGE sql IMMUTABLE;
--------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
--- TT_pe_pei02_wetland_code
---
--- Return 4 character wetland code
--------------------------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei02_wetland_code(text, text, text, text, text, text);
-CREATE OR REPLACE FUNCTION TT_pe_pei02_wetland_code(
   landtype text,
   per1 text,
   landtype2 text,
@@ -2136,32 +2114,44 @@ CREATE OR REPLACE FUNCTION TT_pe_pei02_wetland_code(
   per3 text
 )
 RETURNS text AS $$
-  SELECT CASE
-        WHEN landtype = 'BO' AND per1 >='7' THEN 'BF--'
-        WHEN landtype = 'BO' AND per1 >= '1' AND per1 < '7' THEN 'BT--'
-        WHEN landtype = 'BO' AND (landtype2 = 'DMW' OR landtype2 = 'SMW' OR landtype2 = 'OWW') THEN 'BO--'
-        WHEN landtype = 'SSW' AND (landtype2 = 'MDW' OR landtype2 = 'OWW' OR landtype2 = 'BOW') THEN 'SO-S'
-        WHEN landtype = 'SSW' AND landtype2 = 'WSW' THEN 'ST-S'
-        WHEN landtype = 'SSW' AND per1 = '10' THEN 'SO-S'
-        WHEN landtype = 'WSW' AND per1 >= '7' AND landtype2 = 'SSW' AND per2 > '2' THEN 'SF-S'
-        WHEN landtype = 'WSW' AND landtype2 = 'WSW' THEN 'SF--'
-        WHEN landtype = 'WSW' AND per1 > '1' AND per1 < '7' THEN 'ST--'
-        WHEN landtype = 'WSW' THEN 'SO--'
-        WHEN landtype = 'OWW' AND ((landtype2 = 'SSW' AND per2 >= '3') OR (landtype3 = 'SSW' AND 'per3' >= '3')) THEN 'SO-S'
-        WHEN landtype = 'OWW' AND landtype2 = 'WSW' THEN 'ST--'
-        WHEN landtype = 'OWW' AND landtype2 = 'DMW' AND landtype3 = 'SSW' AND per3 >= '3' THEN 'MO-S'
-        WHEN landtype = 'OWW' AND landtype2 = 'DMW' THEN 'MO--'
-        WHEN landtype = 'OWW' THEN 'WO--'
-        WHEN landtype = 'BKW' THEN 'EOA-'
-        WHEN landtype = 'DMW' THEN 'MO--'
-        WHEN landtype = 'MDW' THEN 'WO--'
-        WHEN landtype = 'SAW' THEN 'EOA-'
-        WHEN landtype = 'SDW' THEN 'Z---'
-        WHEN landtype = 'SFW' THEN 'W---'
-        WHEN landtype = 'SMW' THEN 'MO--'
-        ELSE NULL
-         END;
-$$ LANGUAGE sql IMMUTABLE;
+	BEGIN
+		IF landtype2 = '999'
+		THEN
+		 	RETURN CASE
+		           WHEN landtype='BO' AND NOT per1='0' THEN 'BFX-'
+		           WHEN landtype='BO' AND per1='0' THEN 'BOX-'
+		           WHEN landtype='SO' THEN 'SOX-'
+		           WHEN landtype='SW' AND NOT per1='0' THEN 'STX-'
+		           WHEN landtype='SW' AND per1='0' THEN 'SOX-'
+		           ELSE NULL END;
+	    ELSE
+		    RETURN CASE
+		        WHEN landtype = 'BO' AND per1 >='7' THEN 'BF--'
+		        WHEN landtype = 'BO' AND per1 >= '1' AND per1 < '7' THEN 'BT--'
+		        WHEN landtype = 'BO' AND (landtype2 = 'DMW' OR landtype2 = 'SMW' OR landtype2 = 'OWW') THEN 'BO--'
+		        WHEN landtype = 'SSW' AND (landtype2 = 'MDW' OR landtype2 = 'OWW' OR landtype2 = 'BOW') THEN 'SO-S'
+		        WHEN landtype = 'SSW' AND landtype2 = 'WSW' THEN 'ST-S'
+		        WHEN landtype = 'SSW' AND per1 = '10' THEN 'SO-S'
+		        WHEN landtype = 'WSW' AND per1 >= '7' AND landtype2 = 'SSW' AND per2 > '2' THEN 'SF-S'
+		        WHEN landtype = 'WSW' AND landtype2 = 'WSW' THEN 'SF--'
+		        WHEN landtype = 'WSW' AND per1 > '1' AND per1 < '7' THEN 'ST--'
+		        WHEN landtype = 'WSW' THEN 'SO--'
+		        WHEN landtype = 'OWW' AND ((landtype2 = 'SSW' AND per2 >= '3') OR (landtype3 = 'SSW' AND 'per3' >= '3')) THEN 'SO-S'
+		        WHEN landtype = 'OWW' AND landtype2 = 'WSW' THEN 'ST--'
+		        WHEN landtype = 'OWW' AND landtype2 = 'DMW' AND landtype3 = 'SSW' AND per3 >= '3' THEN 'MO-S'
+		        WHEN landtype = 'OWW' AND landtype2 = 'DMW' THEN 'MO--'
+		        WHEN landtype = 'OWW' THEN 'WO--'
+		        WHEN landtype = 'BKW' THEN 'EOA-'
+		        WHEN landtype = 'DMW' THEN 'MO--'
+		        WHEN landtype = 'MDW' THEN 'WO--'
+		        WHEN landtype = 'SAW' THEN 'EOA-'
+		        WHEN landtype = 'SDW' THEN 'Z---'
+		        WHEN landtype = 'SFW' THEN 'W---'
+		        WHEN landtype = 'SMW' THEN 'MO--'
+		        ELSE NULL END;
+		END IF;
+	END;
+$$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
@@ -4081,37 +4071,10 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- TT_pe_pei01_wetland_validation
 -- Assign 4 letter wetland character code, then return true if the requested character (1-4)
 -- is not null and not -.
--- e.g. TT_pe_pei01_wetland_validation(landtype, per1, '1')
+-- e.g. TT_pe_pei01_wetland_validation(landtype, per1, 999, 999, 999, '1')
 ------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei01_wetland_validation(text, text, text);
+--DROP FUNCTION IF EXISTS TT_pe_pei01_wetland_validation(text, text, text, text, text, text);
 CREATE OR REPLACE FUNCTION TT_pe_pei01_wetland_validation(
-  landtype text,
-  per1 text,
-  ret_char_pos text
-)
-RETURNS boolean AS $$
-  DECLARE
-    _wetland_code text;
-    _wetland_char text;
-  BEGIN
-    _wetland_code = TT_pe_pei01_wetland_code(landtype, per1);
-    _wetland_char = substring(_wetland_code from ret_char_pos::int for 1);
-    IF _wetland_char IS NULL OR _wetland_char = '-' THEN
-      RETURN FALSE;
-    END IF;
-    RETURN TRUE;
-  END;
-$$ LANGUAGE plpgsql IMMUTABLE;
--------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
--- TT_pe_pei02_wetland_validation
--- Assign 4 letter wetland character code, then return true if the requested character (1-4)
--- is not null and not -.
--- e.g. TT_pe_pei02_wetland_validation(landtype, per1, '1')
-------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei02_wetland_validation(text, text, text, text, text, text, text);
-CREATE OR REPLACE FUNCTION TT_pe_pei02_wetland_validation(
   landtype text,
   per1 text,
   landtype2 text,
@@ -4125,7 +4088,7 @@ RETURNS boolean AS $$
     _wetland_code text;
     _wetland_char text;
   BEGIN
-    _wetland_code = TT_pe_pei02_wetland_code(landtype, per1, landtype2, per2, landtype3, per3);
+	_wetland_code = TT_pe_pei01_wetland_code(landtype, per1, landtype2, per2, landtype3, per3);
     _wetland_char = substring(_wetland_code from ret_char_pos::int for 1);
     IF _wetland_char IS NULL OR _wetland_char = '-' THEN
       RETURN FALSE;
@@ -6318,7 +6281,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 --
 -- pass dist_type values where dist_type includes PN
 -------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION TT_pe_pei02_map_dist_year(
+CREATE OR REPLACE FUNCTION TT_pe_pei01_map_dist_year(
   dist_type text
 )
 RETURNS text AS $$
@@ -6343,7 +6306,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
--- TT_pe_pei_dist_type_length_validation
+-- TT_pe_pei01_dist_type_length_validation
 --
 -- dist_type text
 -- landtype text
@@ -6354,7 +6317,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- If this is the case, and the length isnt 4, then the disturbance type isn't applicable and will return false.
 -- Returns true otherwise
 -------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION TT_pe_pei_dist_type_length_validation(
+CREATE OR REPLACE FUNCTION TT_pe_pei01_dist_type_length_validation(
   dist_type TEXT,
   landtype TEXT,
   substring_start TEXT
@@ -7696,35 +7659,10 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- TT_pe_pei01_wetland_translation
 --
 -- Assign 4 letter wetland character code, then return the requested character (1-4)
--- e.g. TT_pe_pei01_wetland_translation(landtype, per1, '1')
+-- e.g. TT_pe_pei01_wetland_translation(landtype, per1, 999, 999, 999, 999, '1')
 ------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei01_wetland_translation(text, text, text);
+--DROP FUNCTION IF EXISTS TT_pe_pei01_wetland_translation(text, text, text, text, text, text, text);
 CREATE OR REPLACE FUNCTION TT_pe_pei01_wetland_translation(
-  landtype text,
-  per1 text,
-  ret_char_pos text
-)
-RETURNS text AS $$
-  DECLARE
-    _wetland_code text;
-  BEGIN
-    _wetland_code = TT_pe_pei01_wetland_code(landtype, per1);
-    IF _wetland_code IS NULL THEN
-      RETURN NULL;
-    END IF;
-    RETURN TT_wetland_code_translation(_wetland_code, ret_char_pos);
-  END;
-$$ LANGUAGE plpgsql IMMUTABLE;
--------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
--- TT_pe_pei02_wetland_translation
---
--- Assign 4 letter wetland character code, then return the requested character (1-4)
--- e.g. TT_pe_pei02_wetland_translation(landtype, per1, '1')
-------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei02_wetland_translation(text, text, text, text, text, text, text);
-CREATE OR REPLACE FUNCTION TT_pe_pei02_wetland_translation(
   landtype text,
   per1 text,
   landtype2 text,
@@ -7737,7 +7675,7 @@ RETURNS text AS $$
   DECLARE
     _wetland_code text;
   BEGIN
-    _wetland_code = TT_pe_pei02_wetland_code(landtype, per1, landtype2, per2, landtype3, per3);
+	_wetland_code = TT_pe_pei01_wetland_code(landtype, per1, landtype2, per2, landtype3, per3);
     IF _wetland_code IS NULL THEN
       RETURN NULL;
     END IF;
