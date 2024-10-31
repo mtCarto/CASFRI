@@ -1634,6 +1634,7 @@ RETURNS text AS $$
                   WHEN rulelc = 'row_translation_rule_nt_lyr' THEN 'INVALID_VALUE'
 				  WHEN rulelc = 'hasnflinfo' THEN 'INVALID_VALUE'
 				  WHEN rulelc = 'mb_fri03_species_validation' THEN 'NULL_VALUE'
+				  WHEN rulelc = 'pe_pei_has_nfl_info' THEN 'NOT_APPLICABLE'
                   ELSE TT_DefaultErrorCode(rulelc, targetTypelc) END;
     END IF;
   END;
