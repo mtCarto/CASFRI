@@ -6183,7 +6183,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
--- TT_pe_pie01_countOfNotNull
+-- TT_pe_pei01_countOfNotNull
 --
 -- spec1 text
 -- spec2 text
@@ -6191,6 +6191,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- spec4 text
 -- spec5 text
 -- landtype text
+-- class1 text
 -- max_rank_to_consider text
 --
 -- Determine if spec1/2/3/4/5 contain a valid species code. Note that the
@@ -6202,66 +6203,8 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 --
 -- Pass species and nfl variables to countOfNotNull().
 ------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei01_countOfNotNull(text, text, text, text, text, text,text);
+--DROP FUNCTION IF EXISTS TT_pe_pei01_countOfNotNull(text, text, text, text, text, text,text, text);
 CREATE OR REPLACE FUNCTION TT_pe_pei01_countOfNotNull(
-  spec1 text,
-  spec2 text,
-  spec3 text,
-  spec4 text,
-  spec5 text,
-  landtype text,
-  max_rank_to_consider text
-)
-RETURNS int AS $$
-  DECLARE
-    species_codes text[] := '{AL,AP,BE,BF,BN,BS,CE,DF,EL,EM,GB,HE,JP,LA,LI,LP,MA,NS,PC,PO,RM,RO,RP,RS,SM,SP,WA,WB,WP,WS,YB}'; --codes copied from lookup table
-    nfl_codes text[] := '{SO,SD,WW,FL,CL,WF,PL,RN,RD,RR,AG,EP,UR,BO}';
-    is_lyr text;
-    is_nfl text;
-  BEGIN
-    -- if any of the species have a valid species code, set is_lyr to be a valid string.
-    IF spec1 = ANY(species_codes) OR spec2 = ANY(species_codes) OR spec3 = ANY(species_codes) OR spec4 = ANY(species_codes) OR spec5 = ANY(species_codes) THEN
-      is_lyr = 'a_value';
-    ELSE
-      is_lyr = NULL::text;
-    END IF;
-  
-    -- if landtype matches any of the nfl values, we know there is an NFL record.
-    -- set is_nfl to be a valid string.
-    IF landtype = ANY(nfl_codes) THEN
-      is_nfl = 'a_value';
-    ELSE
-      is_nfl = NULL::text;
-    END IF;
-  
-    -- call countOfNotNull
-    RETURN TT_countOfNotNull(is_lyr, is_nfl, max_rank_to_consider, 'FALSE');
-  END;
-$$ LANGUAGE plpgsql IMMUTABLE;
--------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
--- TT_pe_pie02_countOfNotNull
---
--- spec1 text
--- spec2 text
--- spec3 text
--- spec4 text
--- spec5 text
--- landtype text
--- max_rank_to_consider text
---
--- Determine if spec1/2/3/4/5 contain a valid species code. Note that the
--- value needs to be checked against the valid codes because spec1 in pe01
--- contains non-species codes. If a valid species code is present, assign
--- a string to indicate a layer in countOfNotNull.
--- Determine if the row contains an NFL record. If it does assign a string
--- so it can be counted as a non-null layer.
---
--- Pass species and nfl variables to countOfNotNull().
-------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_pe_pei02_countOfNotNull(text, text, text, text, text, text,text, text);
-CREATE OR REPLACE FUNCTION TT_pe_pei02_countOfNotNull(
   spec1 text,
   spec2 text,
   spec3 text,
@@ -6273,8 +6216,8 @@ CREATE OR REPLACE FUNCTION TT_pe_pei02_countOfNotNull(
 )
 RETURNS int AS $$
   DECLARE
-    species_codes text[] := '{AL,MA,AS,AP,BF,BE,BI,BA,BS,BN,CE,CP,DT,DF,LA,EM,EB,EL,GB,HE,HP,HS,IH,JP,JL,LX,LI,LP,NS,PC,PP,PO,RM,RO,RP,RS,SM,SP,SI,SF,TH,WA,WB,WP,WS,WI,YB,YP}'; --codes copied from PEI CORPORATE LAND USE INVENTORY 2000
-    nfl_codes text[] := '{FM,FL,FR,MS,NU,OR,AC,FD,MV,RT,CO,MH,MT,SG,AS,EP,FT,FP,LF,TF,LY,ABN,COS,CG,GF,PF,RK,SK,AR,CT,LH,PL,RR,RD,WF,RE,SE,CH,CY,HC,HO,SC,BOW,BKW,DMW,MDW,OWW,SAW,SDW,SFW,SMW,SSW,BAR,BSB,BLD,WWW,GRS,PAV,SHR,TRE,WAT,COR,HAY,BLB,CRN,GRN,PAS,POT,OTH,SOY,CC}';
+    species_codes text[] := '{AL,AP,AS,BA,BE,BF,BI,BN,BS,CE,CP,DF,DT,EB,EL,EL,EM,GB,HE,HP,HS,IH,JL,JP,LA,LI,LP,LX,MA,NS,PC,PO,PP,RM,RO,RP,RS,SF,SI,SM,SP,TH,WA,WB,WI,WP,WS,YB,YP}'; --codes copied from PEI CORPORATE LAND USE INVENTORY 2000
+    nfl_codes text[] := '{ABN,AC,AG,AR,AS,BAR,BKW,BLB,BLD,BO,BOW,BSB,CC,CG,CH,CL,CO,COR,COS,CRN,CT,CY,DMW,EP,FD,FL,FM,FP,FR,FT,GF,GRN,GRS,HAY,HC,HO,LF,LH,LY,MDW,MH,MS,MT,MV,NU,OR,OTH,OWW,PAS,PAV,PF,PL,POT,RD,RE,RK,RN,RR,RT,SAW,SC,SD,SDW,SE,SFW,SG,SHR,SK,SMW,SO,SOY,SSW,TF,TRE,UR,WAT,WF,WF,WW,WWW}';
     is_lyr text;
     is_nfl text;
   BEGIN
@@ -6301,7 +6244,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
--- TT_pe_pei02_map_dist_year
+-- TT_pe_pei01_map_dist_year
 --
 -- dist_type text
 --
