@@ -6230,8 +6230,7 @@ RETURNS int AS $$
 
 
     -- if landtype matches any of the nfl values, we know there is an NFL record., set is_nfl to be a valid string.
-    -- species/covertype var contains some nfl codes as well
-    IF landtype = ANY(nfl_codes) OR spec1 = ANY(nfl_codes) OR spec2 = ANY(nfl_codes) OR spec3 = ANY(nfl_codes) OR spec4 = ANY(nfl_codes) OR spec5 = ANY(nfl_codes) OR class1 = ANY(nfl_codes)  THEN
+    IF landtype = ANY(nfl_codes) OR class1 = ANY(nfl_codes)  THEN
       is_nfl = 'a_value';
     ELSE
       is_nfl = NULL::text;
