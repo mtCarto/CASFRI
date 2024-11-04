@@ -4604,6 +4604,7 @@ RETURNS boolean AS $$
     _landuse text; -- PE02 - needs to be 2nd in string list
     _subuse text; -- PE02 - needs to be 3rd in string list
     _pe02_non_for_veg text; -- PE02 - needs to be 3rd string list
+    _nfl_code_list text;
   BEGIN
     -- parse string lists
     _fiter_attributes = TT_ParseStringList(filter_attributes, TRUE);
@@ -4724,7 +4725,8 @@ RETURNS boolean AS $$
 
    	-- run validations
     IF 'all_nfl' = ANY (_fiter_attributes) THEN
-       IF TT_matchList(_class1, '{''BAR'',''BSB'',''SDW'',''WWW'',''WAT''}') OR TT_matchList(_subuse, '{''BAR'',''BSB'',''WWW'',''WAT''}') OR TT_matchList(_class1, '{''BAR'',''BSB'',''WWW'',''WAT''}') OR TT_matchList(_landuse, '{''AGR'',''COM'',''RES'',''IND'',''NON'',''REC'',''TRN'',''URB'',''INT''}') OR TT_matchList(_subuse, '{''BAR'',''BSB'',''WWW'',''WAT'',''BOW''}') THEN
+    	_nfl_code_list := '{''BAR'',''BSB'',''SDW'',''WWW'',''WAT'',''SO'',''SD'',''WW'',''FL'',''AGR'',''COM'',''RES'',''IND'',''NON'',''REC'',''TRN'',''URB'',''INT'',''CL'',''WF'',''PL'',''RN'',''RD'',''RR'',''AG'',''EP'',''UR'',''BOW'',''BO''}';
+       IF (TT_matchList(_class1, _nfl_code_list) OR TT_matchList(_subuse, _nfl_code_list) OR TT_matchList(_landuse, _nfl_code_list)) THEN
          _non_for_veg_boolean = TRUE;
        END IF;
      END IF;
