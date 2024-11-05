@@ -1634,7 +1634,6 @@ RETURNS text AS $$
                   WHEN rulelc = 'row_translation_rule_nt_lyr' THEN 'INVALID_VALUE'
 				  WHEN rulelc = 'hasnflinfo' THEN 'INVALID_VALUE'
 				  WHEN rulelc = 'mb_fri03_species_validation' THEN 'NULL_VALUE'
-				  WHEN rulelc = 'pe_pei01_has_nfl_info' THEN 'NOT_APPLICABLE'
                   ELSE TT_DefaultErrorCode(rulelc, targetTypelc) END;
     END IF;
   END;
@@ -3235,7 +3234,9 @@ CREATE OR REPLACE FUNCTION TT_pe_pei01_hasCountOfNotNull(
   spec3 text,
   spec4 text,
   spec5 text,
-  landtype text,
+  landuse text,
+  subuse text,
+  class1 text,
   count text,
   exact text
 )
@@ -3249,7 +3250,7 @@ RETURNS boolean AS $$
     _exact = exact::boolean;
 
     -- process
-    _counted_nulls = TT_pe_pei01_countOfNotNull(spec1, spec2, spec3, spec4, spec5, landtype, '2');
+    _counted_nulls = TT_pe_pei01_countOfNotNull(spec1, spec2, spec3, spec4, spec5, landuse, subuse, class1, '2');
 
     IF _exact THEN
       RETURN _counted_nulls = _count;
@@ -4744,36 +4745,6 @@ $$ LANGUAGE plpgsql;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
--- TT_pe_pei01_has_nfl_info
--------------------------------------------------------------------------------
--- inventory_id 
--- class1 
--- landuse  
--- subuse
--- landtype 
---
--- For PE01, determines if landtype matches list.
--- For other PEI inventories, calls main hasNFLInfo function
-CREATE OR REPLACE FUNCTION TT_pe_pei01_has_nfl_info(
-  inventory_id TEXT, 
-  class1 TEXT, 
-  landuse TEXT, 
-  subuse TEXT,
-  landtype TEXT
-)
-RETURNS boolean AS $$
-  BEGIN
-    IF inventory_id = 'PE01'
-    THEN
-    	RETURN tt_matchList(landtype,'{''SO'',''SD'',''WW'',''FL'',''CL'',''WF'',''PL'',''RN'',''RD'',''RR'',''AG'',''EP'',''UR'',''BO''}');
-    ELSE
-    	RETURN tt_hasNFLInfo(inventory_id, ARRAY['all_nfl', NULL, NULL]::TEXT, ARRAY[class1, landuse, subuse, NULL, NULL]::TEXT);
-    END IF;
-  END;
-$$ LANGUAGE plpgsql;
-
-
--------------------------------------------------------------------------------
 -- TT_row_translation_rule_nt_lyr
 -------------------------------------------------------------------------------
 -- typeclas
@@ -6212,14 +6183,15 @@ CREATE OR REPLACE FUNCTION TT_pe_pei01_countOfNotNull(
   spec3 text,
   spec4 text,
   spec5 text,
-  landtype text,
+  landuse text,
+  subuse text,
   class1 text,
   max_rank_to_consider text
 )
 RETURNS int AS $$
   DECLARE
     species_codes text[] := '{AL,AP,AS,BA,BE,BF,BI,BN,BS,CE,CP,DF,DT,EB,EL,EL,EM,GB,HE,HP,HS,IH,JL,JP,LA,LI,LP,LX,MA,NS,PC,PO,PP,RM,RO,RP,RS,SF,SI,SM,SP,TH,WA,WB,WI,WP,WS,YB,YP}'; --codes copied from PEI CORPORATE LAND USE INVENTORY 2000
-    nfl_codes text[] := '{ABN,AC,AG,AR,AS,BAR,BKW,BLB,BLD,BO,BOW,BSB,CC,CG,CH,CL,CO,COR,COS,CRN,CT,CY,DMW,EP,FD,FL,FM,FP,FR,FT,GF,GRN,GRS,HAY,HC,HO,LF,LH,LY,MDW,MH,MS,MT,MV,NU,OR,OTH,OWW,PAS,PAV,PF,PL,POT,RD,RE,RK,RN,RR,RT,SAW,SC,SD,SDW,SE,SFW,SG,SHR,SK,SMW,SO,SOY,SSW,TF,TRE,UR,WAT,WF,WF,WW,WWW}';
+    nfl_codes text[] := '{BAR,BSB,SDW,WWW,WAT,SO,SD,WW,FL,AGR,COM,RES,IND,NON,REC,TRN,URB,INT,CL,WF,PL,RN,RD,RR,AG,EP,UR,BOW,BO}';
     is_lyr text;
     is_nfl text;
   BEGIN
@@ -6232,7 +6204,7 @@ RETURNS int AS $$
 
 
     -- if landtype matches any of the nfl values, we know there is an NFL record., set is_nfl to be a valid string.
-    IF landtype = ANY(nfl_codes) OR class1 = ANY(nfl_codes)  THEN
+    IF landuse = ANY(nfl_codes) OR subuse = ANY(nfl_codes) OR class1 = ANY(nfl_codes)  THEN
       is_nfl = 'a_value';
     ELSE
       is_nfl = NULL::text;
