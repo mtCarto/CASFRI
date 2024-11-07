@@ -1587,6 +1587,7 @@ RETURNS text AS $$
 				  WHEN rulelc = 'nb_hasCountOfNotNull' THEN '-8886'
 				  WHEN rulelc = 'pe_pei02_map_dist_year' THEN '-8886'
 				  WHEN rulelc = 'mb_fri03_getSpeciesPer1' THEN '-8888'
+				  WHEN rulelc = 'nt_fvi01_species_per_range_validation' THEN '-9999'
                   ELSE
                    TT_DefaultErrorCode(rulelc, targetTypelc) END;
     ELSIF targetTypelc = 'geometry' THEN
@@ -4591,6 +4592,29 @@ RETURNS boolean AS $$
     ELSE
       RETURN _counted_nulls >= _count;
     END IF;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- TT_nt_fvi01_species_per_range_validation
+--
+-- inventory_id
+-- species_per
+--
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nt_fvi01_species_per_range_validation(text, text);
+CREATE OR REPLACE FUNCTION TT_nt_fvi01_species_per_range_validation(
+  inventory_id text,
+  species_per text
+)
+RETURNS BOOLEAN AS $$
+  BEGIN
+    IF inventory_id IN ('NT01', 'NT03') THEN
+	  RETURN tt_isBetween(species_per,1::TEXT,10::TEXT);
+	ELSE
+	  RETURN tt_isBetween(species_per,1::TEXT,100::TEXT);
+	END IF;
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------

@@ -35,4 +35,4 @@ rule_id,target_attribute,target_attribute_type,validation_rules,translation_rule
 33,ORIGIN_UPPER,integer,"notNull(origin_upper);isInt(origin_upper);isBetween(origin_upper,1000,2024)",copyInt(origin_upper),Copies source value to ORIGIN_UPPER,TRUE
 34,ORIGIN_LOWER,integer,"notNull(origin_lower);isInt(origin_lower);isBetween(origin_lower,1000,2024)",copyInt(origin_lower),Copies  source value to ORIGIN_LOWER,TRUE
 35,SITE_CLASS,text,"notNull(site_class);notEmpty(site_class);matchList(site_class,{'5','4','3','2','1','VP','P','M','R','VR'}) ","mapText(site_class, {'5','4','3','2','1','VP','P','M','R','VR'}, {'UNPRODUCTIVE','POOR','MEDIUM','GOOD','GOOD','UNPRODUCTIVE','POOR','MEDIUM','GOOD','GOOD'}) ",Maps source value to SITE_CLASS using lists of values,TRUE
-36,SITE_INDEX,double precision,"notNull(site_index);isNumeric(site_index);notMatchList(site_index, 999|-8887);isBetween(site_index,1,99)",copyDouble(site_index),Copy source value to SITE_INDEX,TRUE
+36,SITE_INDEX,double precision,"notNull(site_index|-8887);isNumeric(site_index);isBetween(site_index,1,99)",copyDouble(site_index),Copy source value to SITE_INDEX,TRUE

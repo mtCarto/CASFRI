@@ -186,7 +186,8 @@ WITH test_nb AS (
 	SELECT 'TT_nt_lyr_layer_translation'::text function_tested,              138 maj_num,  6 nb_test UNION ALL
   SELECT 'TT_pe_pei02_countOfNotNull'::text function_tested,               139 maj_num,  9 nb_test UNION ALL
    SELECT 'TT_mb_fri03_getSpeciesPer1'::text function_tested,               140 maj_num,  5 nb_test UNION ALL
-   SELECT 'TT_mb_fri03_species_validation'::text function_tested,               141 maj_num,  9 nb_test
+   SELECT 'TT_mb_fri03_species_validation'::text function_tested,               141 maj_num,  9 nb_test UNION ALL
+   SELECT 'TT_nt_fvi01_species_per_range_validation'::text function_tested,     142 maj_num,  4 nb_test
 ),
 test_series AS (
 -- Build a table of function names with a sequence of number for each function to be tested
@@ -4775,7 +4776,34 @@ SELECT '141.9'::text number,
        'TT_mb_fri03_species_validation'::text function_tested,
        'Test empty species'::text description,
        TT_mb_fri03_species_validation('', '1') = FALSE passed
- ---------------------------------------------------------
+---------------------------------------------------------
+ -- TT_nt_fvi01_species_per_range_validation
+---------------------------------------------------------
+UNION ALL
+SELECT '142.1'::text number,
+       'TT_nt_fvi01_species_per_range_validation'::text function_tested,
+       'Test valid small range'::text description,
+       TT_nt_fvi01_species_per_range_validation('NT03', '2') = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.2'::text number,
+       'TT_nt_fvi01_species_per_range_validation'::text function_tested,
+       'Test valid large range'::text description,
+       TT_nt_fvi01_species_per_range_validation('NT04', '60') = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.3'::text number,
+       'TT_nt_fvi01_species_per_range_validation'::text function_tested,
+       'Test invalid small range'::text description,
+       TT_nt_fvi01_species_per_range_validation('NT03', '12') = FALSE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '142.4'::text number,
+       'TT_nt_fvi01_species_per_range_validation'::text function_tested,
+       'Test invalid large range'::text description,
+       TT_nt_fvi01_species_per_range_validation('NT04', '105') = FALSE passed
+---------------------------------------------------------
+
        
 ) AS b 
 ON (a.function_tested = b.function_tested AND (regexp_split_to_array(number, '\.'))[2] = min_num)
