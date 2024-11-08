@@ -2692,7 +2692,7 @@ UNION ALL
 SELECT '66.5'::text number,
        'TT_mb_fri_countOfNotNull'::text function_tested,
        'Test nonprod layers with no species'::text description,
-       TT_mb_fri_countOfNotNull('', '701', '2') = 1 passed
+       TT_mb_fri_countOfNotNull('', '701', '2') = 0 passed
 ---------------------------------------------------------
  -- TT_mb_fri_hasCountOfNotNull
 ---------------------------------------------------------

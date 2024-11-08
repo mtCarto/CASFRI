@@ -6460,7 +6460,8 @@ RETURNS int AS $$
 	
 	  -- if val is a non-productive type, we know there is a LYR record. It's the same attribute as nfl
     -- set species to be a valid string.
-    IF TT_matchList(nfl,'{''700'', ''701'', ''702'', ''703'', ''704'', ''710'', ''711'', ''712'', ''713'', ''720'', ''721'', ''722'', ''723'', ''724'', ''725'', ''730'', ''731'', ''732'', ''733'', ''734''}') THEN
+    IF TT_matchList(nfl,'{''700'', ''701'', ''702'', ''703'', ''704'', ''710'', ''711'', ''712'', ''713'', ''720'', ''721'', ''722'', ''723'', ''724'', ''725'', ''730'', ''731'', ''732'', ''733'', ''734''}') 
+    OR tt_hasCountOfNotNull(species, '1', 'FALSE') THEN
       species = 'a_value';
     END IF;
   
