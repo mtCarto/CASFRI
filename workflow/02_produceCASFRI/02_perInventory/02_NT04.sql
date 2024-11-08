@@ -106,13 +106,6 @@ INSERT INTO casfri50.nfl_all --
 SELECT * FROM TT_Translate_nt04_nfl('rawfri', 'nt04_l3_to_nt_l1_map');
 
 
--- Layer 2 reusing NT01 layer 1 translation table
-SELECT TT_CreateMappingView('rawfri', 'nt04', 4, 'nt', 1);
-
-INSERT INTO casfri50.nfl_all --
-SELECT * FROM TT_Translate_nt04_nfl('rawfri', 'nt04_l4_to_nt_l1_map');
-
-
 ------------------------
 -- GEO
 ------------------------
