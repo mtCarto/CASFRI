@@ -2441,7 +2441,7 @@ $$ LANGUAGE sql IMMUTABLE;
 --
 -- Return 4-character wetland code
 -- In pc02 every ECO translation is associated with either a lYR or NFL horizontal layer.
--- In order to correctly assign LAYER values for ECO, LATION_RULE should only run
+-- In order to correctly assign LAYER values for ECO, ROW_TRANSLATION_RULE should only run
 -- the wetland translations associated with LYR when a LYR row is being translated in the attribute
 -- dependencies. We use the lyr_or_nfl assigned to 'table' in the attribute_dependencies to do this.
 -- Same goes for NFL, should only run for NFL rows being translated in attribute_dependencies.
