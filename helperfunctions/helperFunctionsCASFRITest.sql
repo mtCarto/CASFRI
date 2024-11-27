@@ -190,7 +190,9 @@ WITH test_nb AS (
    SELECT 'TT_mb_fli01_hasCountOfNotNull'::text function_tested,            142 maj_num,  4 nb_test UNION ALL
    SELECT 'TT_mb_fli01_countOfNotNull'::text function_tested,               143 maj_num,  4 nb_test UNION ALL
    SELECT 'TT_pe_pei01_dist_type_length_validation'::text function_tested,  144 maj_num,  4 nb_test UNION ALL
-   SELECT 'TT_pe_pei01_has_nfl_info'::text function_tested,                 145 maj_num,  4 nb_test
+   SELECT 'TT_pe_pei01_has_nfl_info'::text function_tested,                 145 maj_num,  4 nb_test UNION ALL
+   SELECT 'TT_yvi03_hascountofnotnull'::text function_tested,               146 maj_num,  4 nb_test UNION ALL
+   SELECT 'TT_yvi03_countofnotnull'::text function_tested,                  147 maj_num,  4 nb_test
 ),
 test_series AS (
 -- Build a table of function names with a sequence of number for each function to be tested
@@ -4832,7 +4834,7 @@ SELECT '143.4'::text number,
        'Test 2 not null'::text description,
        TT_mb_fli01_countOfNotNull('{SP1}', '{SP2}', '{NULL}', '{NULL}', '{NULL}', 'NULL', 3::TEXT) = 2 passed
 ---------------------------------------------------------
- -- TT_pe_pei_dist_type_length_validation
+  -- TT_pe_pei_dist_type_length_validation
 ---------------------------------------------------------
 UNION ALL
 SELECT '144.1'::text number,
@@ -4884,7 +4886,58 @@ SELECT '145.4'::text number,
        'Test greater than length 4'::text description,
        TT_pe_pei01_has_nfl_info('PE02', NULL, 'FOR', NULL, NULL) = FALSE passed
 ---------------------------------------------------------
-     
+ -- TT_yvi03_hasCountOfNotNull
+---------------------------------------------------------
+UNION ALL
+SELECT '146.1'::text number,
+       'TT_yvi03_hascountofnotnull'::text function_tested,
+       'Test species and null NFL'::text description,
+       TT_yvi03_hascountofnotnull('SP', NULL, NULL, NULL, NULL, 1::TEXT, TRUE::TEXT) = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '146.2'::text number,
+       'TT_yvi03_hascountofnotnull'::text function_tested,
+       'Test species and NFL'::text description,
+       TT_yvi03_hascountofnotnull('SP', 'Vegetated, Non-Forested', NULL, 'Low Shrub', 'Alpine', 1::TEXT, FALSE::TEXT) = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '146.3'::text number,
+       'TT_yvi03_hascountofnotnull'::text function_tested,
+       'Test species and non NFL'::text description,
+       TT_yvi03_hascountofnotnull('SP', 'Vegetated, Forested', NULL, NULL, 'Upland', 2::TEXT, FALSE::TEXT) = FALSE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '146.4'::text number,
+       'TT_yvi03_hascountofnotnull'::text function_tested,
+       'Test null species and null NFL'::text description,
+       TT_yvi03_hascountofnotnull(NULL, NULL, NULL, NULL, NULL, 1::TEXT, FALSE::TEXT) = FALSE passed
+---------------------------------------------------------
+ -- TT_yvi03_countofnotnull
+---------------------------------------------------------
+UNION ALL
+SELECT '147.1'::text number,
+       'TT_yvi03_countofnotnull'::text function_tested,
+       'Test species and null NFL'::text description,
+       TT_yvi03_countofnotnull('SP', NULL, NULL, NULL, NULL, 1::TEXT) = 1 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '147.2'::text number,
+       'TT_yvi03_countofnotnull'::text function_tested,
+       'Test species and NFL'::text description,
+       TT_yvi03_countofnotnull('SP', 'Vegetated, Non-Forested', NULL, 'Low Shrub', 'Alpine', 2::TEXT) = 2 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '147.3'::text number,
+       'TT_yvi03_countofnotnull'::text function_tested,
+       'Test species and non NFL'::text description,
+       TT_yvi03_countofnotnull('SP', 'Vegetated, Forested', NULL, NULL, 'Upland', 2::TEXT) = 1 passed
+---------------------------------------------------------
+UNION ALL
+SELECT '147.4'::text number,
+       'TT_yvi03_countofnotnull'::text function_tested,
+       'Test null species and null NFL'::text description,
+       TT_yvi03_countofnotnull(NULL, NULL, NULL, NULL, NULL, 1::TEXT) = 0 passed
+---------------------------------------------------------
 ) AS b 
 ON (a.function_tested = b.function_tested AND (regexp_split_to_array(number, '\.'))[2] = min_num)
 ORDER BY maj_num::int, min_num::int
