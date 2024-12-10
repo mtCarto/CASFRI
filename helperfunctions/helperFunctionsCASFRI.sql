@@ -8294,6 +8294,31 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
+-- TT_nb_stand_structure_translation
+--
+-- Return either 'SINGLE_LAYERED' or 'MULTI_LAYERED' depending on count of lyr_all layers
+-- If wc = 'FW' then the layer exists
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nb_stand_structure_translation(text, text, text)
+CREATE OR REPLACE FUNCTION TT_nb_stand_structure_translation(
+  layer1_sp text,
+  layer2_sp text,
+  wc text
+)
+RETURNS text AS $$
+  DECLARE
+	_nfl text;
+  BEGIN
+    IF wc = 'FW' THEN
+      layer1_sp = 'a string';
+    END IF;
+		
+    RETURN tt_ifElseCountOfNotNullText(layer1_sp, layer2_sp, 2::TEXT, 1::TEXT, 'SINGLE_LAYERED', 'MULTI_LAYERED');
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
 -- TT_qc_prg3_src_inv_area_translation
 --
 -- If inventory_id is QC01, use divideDouble(src_inv_area, 10000)
