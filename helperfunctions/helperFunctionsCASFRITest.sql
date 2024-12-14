@@ -4629,8 +4629,56 @@ SELECT '138.6'::text number,
        'TT_nt_lyr_layer_translation'::text function_tested,
        'Test layer 2 null mintypeclas and species'::text description,
        TT_nt_lyr_layer_translation('TC', NULL::text, '{''10'',''5''}', '{''A''}', '{''B''}', '2') = 2 passed
-
-	
+---------------------------------------------------------
+UNION ALL
+SELECT '144.1'::text number,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
+       'Test substring start = 1'::text description,
+       TT_pe_pei01_dist_type_length_validation('AB', 'CD', '1') = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '144.2'::text number,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
+       'Test substring start != 1 and length != 4'::text description,
+       TT_pe_pei01_dist_type_length_validation('AB', 'CD', '3') = FALSE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '144.3'::text number,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
+       'Test coalesced and length 4'::text description,
+       TT_pe_pei01_dist_type_length_validation(NULL, 'ABCD', '2') = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '144.4'::text number,
+       'TT_pe_pei01_dist_type_length_validation'::text function_tested,
+       'Test greater than length 4'::text description,
+       TT_pe_pei01_dist_type_length_validation('ABCDE', 'ABCD', '4') = FALSE passed
+---------------------------------------------------------
+ -- TT_pe_pei01_has_nfl_info
+---------------------------------------------------------
+UNION ALL
+SELECT '145.1'::text number,
+       'TT_pe_pei01_has_nfl_info'::text function_tested,
+       'Test substring start = 1'::text description,
+       TT_pe_pei01_has_nfl_info('PE04', NULL, 'RES', 'CO', NULL) = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '145.2'::text number,
+       'TT_pe_pei01_has_nfl_info'::text function_tested,
+       'Test substring start != 1 and length != 4'::text description,
+       TT_pe_pei01_has_nfl_info('PE01', NULL, NULL, NULL, 'SD') = TRUE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '145.3'::text number,
+       'TT_pe_pei01_has_nfl_info'::text function_tested,
+       'Test coalesced and length 4'::text description,
+       TT_pe_pei01_has_nfl_info('PE01', NULL, NULL, NULL, NULL) = FALSE passed
+---------------------------------------------------------
+UNION ALL
+SELECT '145.4'::text number,
+       'TT_pe_pei01_has_nfl_info'::text function_tested,
+       'Test greater than length 4'::text description,
+       TT_pe_pei01_has_nfl_info('PE02', NULL, 'FOR', NULL, NULL) = FALSE passed
 ) AS b 
 ON (a.function_tested = b.function_tested AND (regexp_split_to_array(number, '\.'))[2] = min_num)
 ORDER BY maj_num::int, min_num::int
