@@ -1580,13 +1580,15 @@ RETURNS text AS $$
                   WHEN rulelc = 'yt_yvi02_disturbance_notnull' THEN '-8888'
                   WHEN rulelc = 'yt_yvi02_disturbance_hascountoflayers' THEN '-8887'
                   WHEN rulelc = 'row_translation_rule_nt_lyr' THEN '-9997'
-				  WHEN rulelc = 'mb_fri_hasCountOfNotNull' THEN '-8886'
+				  WHEN rulelc = 'mb_fri_hascountofnotnull' THEN '-8886'
 				  WHEN rulelc = 'mb_mb03_disturbance_hascountofnotnull' THEN '-8888'
 				  WHEN rulelc = 'nl_nli01_crown_closure_validation' THEN '-8886'
 				  WHEN rulelc = 'nl_nli01_height_validation' THEN '-8886'
-				  WHEN rulelc = 'nb_hasCountOfNotNull' THEN '-8886'
+				  WHEN rulelc = 'nb_hascountofnotnull' THEN '-8886'
 				  WHEN rulelc = 'pe_pei02_map_dist_year' THEN '-8886'
 				  WHEN rulelc = 'mb_fri03_getSpeciesPer1' THEN '-8888'
+				  WHEN rulelc = 'nt_fvi01_species_per_range_validation' THEN '-9999'
+				  WHEN rulelc = 'yvi03_hascountofnotnull' THEN '-8886'
                   ELSE
                    TT_DefaultErrorCode(rulelc, targetTypelc) END;
     ELSIF targetTypelc = 'geometry' THEN
@@ -3183,6 +3185,8 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 --
 -- vals1 text
 -- vals2 text
+-- typeclas_nonveg text
+-- typeclas_anth text
 -- typeclas text
 -- min_typeclas text
 -- count text
@@ -3190,10 +3194,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 --
 -- hasCOuntOfNotNull using fvi custom countOfNotNull
 ------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_fvi01_hasCountOfNotNull(text, text, text, text, text, text);
+--DROP FUNCTION IF EXISTS TT_fvi01_hasCountOfNotNull(text, text, text, text, text, text, text, text);
 CREATE OR REPLACE FUNCTION TT_fvi01_hasCountOfNotNull(
   vals1 text,
   vals2 text,
+  typeclas_nonveg text,
+  typeclas_anth text,
   typeclas text,
   min_typeclas text,
   count text,
@@ -3209,7 +3215,7 @@ RETURNS boolean AS $$
     _exact = exact::boolean;
 
     -- process
-    _counted_nulls = TT_fvi01_countOfNotNull(vals1, vals2, typeclas, min_typeclas, '4');
+    _counted_nulls = TT_fvi01_countOfNotNull(vals1, vals2, typeclas_nonveg, typeclas_anth, typeclas, min_typeclas, '4');
 
     IF _exact THEN
       RETURN _counted_nulls = _count;
@@ -3482,6 +3488,50 @@ RETURNS boolean AS $$
     ELSE
       RETURN _counted_nulls >= _count;
     END IF;  
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- TT_yvi03_hasCountOfNotNull
+--
+-- species_1 text,
+-- type_lnd text, 
+-- cover_type text, 
+-- cl_mod text, 
+-- landpos text,
+-- count text,
+-- exact text
+--
+-- hasCountOfNotNull using yvi03 custom countOfNotNull
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_yvi03_hasCountOfNotNull(text, text, text, text, text, text, text);
+CREATE OR REPLACE FUNCTION TT_yvi03_hasCountOfNotNull(
+  species_1 text,
+  type_lnd text, 
+  cover_type text, 
+  cl_mod text, 
+  landpos text,
+  count text,
+  exact text
+)
+RETURNS boolean AS $$
+  DECLARE
+    _count int;
+    _exact boolean;
+    _counted_nulls int;
+  BEGIN
+    _count = count::int;
+    _exact = exact::boolean;
+
+    -- process
+    _counted_nulls = TT_yvi03_countOfNotNull(species_1, type_lnd, cover_type, cl_mod, landpos, '2');
+
+    IF _exact THEN
+      RETURN _counted_nulls = _count;
+    ELSE
+      RETURN _counted_nulls >= _count;
+    END IF;
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
@@ -4606,6 +4656,29 @@ RETURNS boolean AS $$
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- TT_nt_fvi01_species_per_range_validation
+--
+-- inventory_id
+-- species_per
+--
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nt_fvi01_species_per_range_validation(text, text);
+CREATE OR REPLACE FUNCTION TT_nt_fvi01_species_per_range_validation(
+  inventory_id text,
+  species_per text
+)
+RETURNS BOOLEAN AS $$
+  BEGIN
+    IF inventory_id IN ('NT01', 'NT03') THEN
+	  RETURN tt_isBetween(species_per,1::TEXT,10::TEXT);
+	ELSE
+	  RETURN tt_isBetween(species_per,1::TEXT,100::TEXT);
+	END IF;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- ROW_TRANSLATION_RULE Function Definitions...
@@ -4794,6 +4867,8 @@ $$ LANGUAGE plpgsql;
 -------------------------------------------------------------------------------
 -- TT_row_translation_rule_nt_lyr
 -------------------------------------------------------------------------------
+-- typeclas_nonveg
+-- typeclas_anth
 -- typeclas
 -- species_1
 -- species_2
@@ -4807,6 +4882,8 @@ $$ LANGUAGE plpgsql;
 -- We just want to avoid adding rows where typeclas is an NFL value and species
 -- are present.
 CREATE OR REPLACE FUNCTION TT_row_translation_rule_nt_lyr(
+  typeclas_nonveg text,
+  typeclas_anth text,
   typeclas text,
   sp1 text,
   sp2 text,
@@ -4821,11 +4898,9 @@ RETURNS boolean AS $$
     nfl_string_list = ARRAY['BE','BR','BU','CB','ES','LA','LL','LS','MO','MU','PO','RE','RI','RO','RS','RT','SW','AP','BP','EL','GP','TS','RD','SH','SU','PM','BL','BM','BY','HE','HF','HG','SL','ST'];
 	
 	-- catch any NFL rows and return FALSE
-    IF typeclas IS NOT NULL THEN
-      IF typeclas = ANY(nfl_string_list) THEN
-        RETURN FALSE;
-	  END IF;
-	END IF;
+    IF typeclas = ANY(nfl_string_list) OR typeclas_nonveg = ANY(nfl_string_list) OR typeclas_anth = ANY(nfl_string_list) THEN
+      RETURN FALSE;
+    END IF;
 	
 	-- Check for any species
 	IF (TT_notEmpty(sp1) OR TT_notEmpty(sp2) OR TT_notEmpty(sp3) OR TT_notEmpty(sp4)) THEN
@@ -5794,6 +5869,8 @@ $$ LANGUAGE sql IMMUTABLE;
 --
 -- vals1 text
 -- vals2 text
+-- typeclas_nonveg text
+-- typeclas_anth text
 -- typeclas text
 -- min_typeclas text
 -- max_rank_to_consider text
@@ -5807,10 +5884,12 @@ $$ LANGUAGE sql IMMUTABLE;
 --
 -- Pass vals1, vals2 and the string/NULLs to countOfNotNull().
 ------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_fvi01_countOfNotNull(text, text, text, text, text);
+--DROP FUNCTION IF EXISTS TT_fvi01_countOfNotNull(text, text, text, text, text, text, text);
 CREATE OR REPLACE FUNCTION TT_fvi01_countOfNotNull(
   vals1 text,
   vals2 text,
+  typeclas_nonveg text,
+  typeclas_anth text,
   typeclas text,
   mintypeclas text,
   max_rank_to_consider text
@@ -5828,7 +5907,7 @@ RETURNS int AS $$
     nfl_string_list = ARRAY['BE','BR','BU','CB','ES','LA','LL','LS','MO','MU','PO','RE','RI','RO','RS','RT','SW','AP','BP','EL','GP','TS','RD','SH','SU','PM','BL','BM','BY','HE','HF','HG','SL','ST'];
 	
     -- if NFL 1 present, give _is_nfl1 a string.
-    IF typeclas = ANY(nfl_string_list) THEN
+    IF typeclas_nonveg = ANY(nfl_string_list) OR typeclas_anth = ANY(nfl_string_list) OR typeclas = ANY(nfl_string_list) THEN
       _is_nfl1 = 'a_value';
 	  _lyr1 = NULL::text;
     ELSE
@@ -5841,8 +5920,13 @@ RETURNS int AS $$
       _is_nfl2 = 'a_value';
 	  _lyr2 = NULL::text;
     ELSE
-      _is_nfl2 = NULL::text;
-	  _lyr2 = vals2;
+    	IF mintypeclas = '999' AND _is_nfl1 = 'a_value'
+    	THEN
+			_lyr2 = NULL::text;
+    	ELSE 
+    		_lyr2 = vals2;
+    	END IF;
+    	_is_nfl2 = NULL::text;
     END IF;
 
     -- call countOfNotNull
@@ -6484,12 +6568,47 @@ RETURNS int AS $$
 	
 	  -- if val is a non-productive type, we know there is a LYR record. It's the same attribute as nfl
     -- set species to be a valid string.
-    IF TT_matchList(nfl,'{''700'', ''701'', ''702'', ''703'', ''704'', ''710'', ''711'', ''712'', ''713'', ''720'', ''721'', ''722'', ''723'', ''724'', ''725'', ''730'', ''731'', ''732'', ''733'', ''734''}') THEN
+    IF TT_matchList(nfl,'{''701'', ''702'', ''703'', ''704'', ''711'', ''712'', ''713'', ''721'', ''722'', ''723'', ''724'', ''725'', ''731'', ''732'', ''733'', ''734''}')
+    OR tt_hasCountOfNotNull(species, '1', 'FALSE') THEN
       species = 'a_value';
     END IF;
   
     -- call countOfNotNull
     RETURN TT_countOfNotNull(species, is_nfl, max_rank_to_consider, 'FALSE');
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- TT_yvi03_countofnotnull
+--
+-- Identify any NFL layers. Identify any non-productve LYR layers and set species_1 to a string.
+-- Pass strings and species to countofnotnull
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_yvi03_countofnotnull(text, text, text, text, text, text);
+CREATE OR REPLACE FUNCTION TT_yvi03_countofnotnull(
+  species_1 text,
+  type_lnd text, 
+  cover_type text, 
+  cl_mod text, 
+  landpos text,
+  maxRankToConsider text
+)
+RETURNS int AS $$
+  DECLARE
+	_nfl text;
+  BEGIN
+    IF tt_notEmpty(species_1) THEN
+      species_1 = 'a string';
+    END IF;
+  
+    IF tt_yvi03_hasNFL(type_lnd, cover_type, cl_mod, landpos) THEN
+      _nfl = 'a_string';
+    ELSE
+      _nfl = NULL;
+    END IF;
+    		
+    RETURN TT_countOfNotNull(species_1, _nfl, maxRankToConsider, 'FALSE');
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
@@ -7452,6 +7571,8 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
 -- TT_nt_lyr_layer_translation
 --
+-- typeclas_nonveg
+-- typeclas_anth
 -- typeclas
 -- mintypeclas
 -- heights
@@ -7459,7 +7580,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- l2_species
 -- getIndex
 --
--- Test if layer 1 and 2 contain species (i.e. not NFL and have speies values)
+-- Test if layer 1 and 2 contain species (i.e. not NFL and have species values)
 -- If yes, order by height.
 -- If no, whichever layer has species gets reported as layer 1.
 -- This prevents the situation where LYR layers are ordered incorectly because some
@@ -7467,6 +7588,8 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 ------------------------------------------------------------
 --DROP FUNCTION IF EXISTS TT_nt_lyr_layer_translation(text, text, text, text, text, text);
 CREATE OR REPLACE FUNCTION TT_nt_lyr_layer_translation(
+  typeclas_nonveg text,
+  typeclas_anth text, 
   typeclas text,
   mintypeclas text,
   heights text,
@@ -7485,10 +7608,8 @@ RETURNS int AS $$
 	
 	-- layer 1 present if species have values and typeclas is either null, or a non-nfl value
 	IF TT_notEmpty(l1_species, 'TRUE') THEN
-	  IF typeclas IS NULL THEN
-	    lyr1 = TRUE; -- species present, typeclas null
-	  ELSIF NOT typeclas = ANY(nfl_string_list) THEN
-        lyr1 = TRUE; -- species present, typeclas not NFL
+	  IF NOT COALESCE(typeclas,'NULL') = ANY(nfl_string_list) AND NOT COALESCE(typeclas_nonveg,'NULL') = ANY(nfl_string_list) AND NOT COALESCE(typeclas_anth,'NULL') = ANY(nfl_string_list) THEN
+        lyr1 = TRUE; -- species present, typeclas NULL or not NFL
 	  ELSE
 	    lyr1 = FALSE; -- species present, typeclas is NFL
 	  END IF;
@@ -7498,17 +7619,14 @@ RETURNS int AS $$
 	
 	-- repeat for species 2
 	IF TT_notEmpty(l2_species, 'TRUE') THEN
-	  IF mintypeclas IS NULL THEN
-	    lyr2 = TRUE; -- species present, mintypeclas null
-	  ELSIF NOT mintypeclas = ANY(nfl_string_list) THEN
-        lyr2 = TRUE; -- species present, mintypeclas not NFL
+	  IF NOT COALESCE(mintypeclas,'NULL') = ANY(nfl_string_list) AND NOT COALESCE(typeclas_nonveg,'NULL') = ANY(nfl_string_list) AND NOT COALESCE(typeclas_anth,'NULL') = ANY(nfl_string_list) THEN
+        lyr2 = TRUE; -- species present, mintypeclas NULL or not NFL
 	  ELSE
 	    lyr2 = FALSE; -- species present, mintypeclas is NFL
 	  END IF;
 	ELSE
 	  lyr2 = FALSE; -- species not present
 	END IF;
-	  
     -- if 2 lyr layers order by height
     IF lyr1 AND lyr2 THEN
       RETURN TT_lyr_layer_translation(heights, l1_species, l2_species, getIndex);
@@ -8171,6 +8289,31 @@ RETURNS int AS $$
     END IF;
     		
     RETURN TT_countOfNotNull(layer1_sp, layer2_sp, _nfl, maxRankToConsider, 'FALSE');
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- TT_nb_stand_structure_translation
+--
+-- Return either 'SINGLE_LAYERED' or 'MULTI_LAYERED' depending on count of lyr_all layers
+-- If wc = 'FW' then the layer exists
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nb_stand_structure_translation(text, text, text)
+CREATE OR REPLACE FUNCTION TT_nb_stand_structure_translation(
+  layer1_sp text,
+  layer2_sp text,
+  wc text
+)
+RETURNS text AS $$
+  DECLARE
+	_nfl text;
+  BEGIN
+    IF wc = 'FW' THEN
+      layer1_sp = 'a string';
+    END IF;
+		
+    RETURN tt_ifElseCountOfNotNullText(layer1_sp, layer2_sp, 2::TEXT, 1::TEXT, 'SINGLE_LAYERED', 'MULTI_LAYERED');
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
