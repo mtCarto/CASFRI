@@ -4836,8 +4836,6 @@ SELECT '143.4'::text number,
        'Test 2 not null'::text description,
        TT_mb_fli01_countOfNotNull('{SP1}', '{SP2}', '{NULL}', '{NULL}', '{NULL}', 'NULL', 3::TEXT) = 2 passed
 ---------------------------------------------------------
-  -- TT_pe_pei_dist_type_length_validation
----------------------------------------------------------
 UNION ALL
 SELECT '144.1'::text number,
        'TT_pe_pei01_dist_type_length_validation'::text function_tested,
