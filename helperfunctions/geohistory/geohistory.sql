@@ -549,7 +549,7 @@ SELECT n, log(abs(n))
 FROM series
 WHERE n != 0;
 
-SELECT round(123, -2)
+SELECT round(123, -2);
 -----------------------------------------------------------
 -- TT_SplitAgg aggregate state function
 --
