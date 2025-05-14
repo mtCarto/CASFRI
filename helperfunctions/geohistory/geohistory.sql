@@ -831,8 +831,12 @@ RETURNS boolean AS $$
   DECLARE
     test boolean;
   BEGIN
-    RETURN (ST_Overlaps(geom1, geom2) OR ST_Contains(geom2, geom1) OR ST_Contains(geom1, geom2))
-           AND (NOT checkIntArea OR TT_IntersectingArea(geom1, geom2) > tolerance);
+    IF NOT checkIntArea OR TT_IntersectingArea(geom1, geom2) < tolerance THEN
+      test = FALSE;
+    ELSE
+      test = (ST_Overlaps(geom1, geom2) OR ST_Contains(geom2, geom1) OR ST_Contains(geom1, geom2));
+    END IF;
+    RETURN test;
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
