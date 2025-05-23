@@ -29,7 +29,7 @@ SELECT TT_CreateMappingView('rawfri', 'bc13', 'bc');
 -- DELETE FROM casfri50.cas_all WHERE left(cas_id, 4) = 'BC13';
 
 -- Add translated ones
-INSERT INTO casfri50.cas_all -- **h**m
+INSERT INTO casfri50.cas_all -- 1h26m
 SELECT * FROM TT_Translate_bc13_cas('rawfri', 'bc13_l1_to_bc_l1_map');
 
 COMMIT;

@@ -245,4 +245,3 @@ DROP TABLE IF EXISTS ${tableName_L2};
 createSQLSpatialIndex=True
 
 source ./common_postprocessing.sh
-
