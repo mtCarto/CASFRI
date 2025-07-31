@@ -41,6 +41,8 @@
 -- 1500000-2000000 sources rows -->  900 test rows
 -- 2000000-more    sources rows --> 1000 test rows
 
+SET search_path = casfri50_test, casfri50, translation, rawfri, public;
+
 -------------------------------------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS casfri50_test;
 -------------------------------------------------------
@@ -132,7 +134,7 @@ SELECT * FROM TT_Translate_bc_eco_test('rawfri', 'bc12_l1_to_bc_l1_map_1000_eco'
 ------------------------
 */
 SELECT TT_CreateMappingView('rawfri', 'bc18', 'bc', 1000, NULL, 'eco'); -- Generates 0 ECO rows
-INSERT INTO casfri50_test.eco_all_new
+CREATE TABLE casfri50_test.eco_all_new AS 
 SELECT * FROM TT_Translate_bc_eco_test('rawfri', 'bc18_l1_to_bc_l1_map_1000_eco');
 ------------------------
 /*

@@ -41,6 +41,8 @@
 -- 1500000-2000000 sources rows -->  900 test rows
 -- 2000000-more    sources rows --> 1000 test rows
 
+SET search_path = casfri50_test, casfri50, translation, rawfri, public; 
+
 -------------------------------------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS casfri50_test;
 ------------------------------------------------------------------------------
@@ -69,7 +71,7 @@ SELECT TT_Prepare('translation', 'yt_yvi02_cas', '_yt_yvi02_cas_test', 'ab_avi01
 ------------------------
 DROP TABLE IF EXISTS casfri50_test.cas_all_new CASCADE;
 ------------------------
-/*
+/* REMINDER TO CHANGE CREATE TABLE BACK TO INSERT BEFORE PUSHING TO REPO
 SELECT TT_CreateMappingView('rawfri', 'ab03', 'ab', 200, NULL, 'cas');
 CREATE TABLE casfri50_test.cas_all_new AS 
 SELECT * FROM TT_Translate_ab_cas_test('rawfri', 'ab03_l1_to_ab_l1_map_200_cas');
@@ -136,7 +138,7 @@ SELECT * FROM TT_Translate_bc_cas_test('rawfri', 'bc12_l1_to_bc_l1_map_1000_cas'
 ------------------------
 */
 SELECT TT_CreateMappingView('rawfri', 'bc18', 'bc', 1000, NULL, 'cas');
-INSERT INTO casfri50_test.cas_all_new 
+CREATE TABLE casfri50_test.cas_all_new AS  
 SELECT * FROM TT_Translate_bc_cas_test('rawfri', 'bc18_l1_to_bc_l1_map_1000_cas');
 ------------------------
 /*
