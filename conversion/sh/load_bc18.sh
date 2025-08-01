@@ -28,11 +28,21 @@ inventoryID=BC18
 
 srcFileName=VEG_COMP_LYR
 
+###########SRC file is not unzipped or projection data###############
+
 srcFileName_L1=${srcFileName}_L1_POLY
-srcFullPath_L1="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L1}_2024.gdb"
+srcFullPath_L1="/vsizip/$friDir/BC/$inventoryID/data/inventory/${srcFileName_L1}.gdb.zip/${srcFileName_L1}.gdb"
 
 srcFileName_L2=${srcFileName}_L2_POLY
-srcFullPath_L2="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L2}_2024.gdb"
+srcFullPath_L2="/vsizip/$friDir/BC/$inventoryID/data/inventory/${srcFileName_L2}.gdb.zip/${srcFileName_L2}.gdb"
+
+###########SRC file is unzipped ##########################
+
+#srcFileName_L1=${srcFileName}_L1_POLY
+#srcFullPath_L1="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L1}_2024.gdb"
+
+#srcFileName_L2=${srcFileName}_L2_POLY
+#srcFullPath_L2="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L2}_2024.gdb"
 
 #############SRC FILE PATH FOR PROJECTION##################
 
@@ -54,12 +64,12 @@ tableName_L2=${fullTargetTableName}_layer_2
 
 "$gdalFolder/ogr2ogr" \
 -f PostgreSQL "$pg_connection_string" "$srcFullPath_L1" \
--nln $tableName_L1 $layer_creation_options $other_options \
+-nln $tableName_L1 $layer_creation_options -s_srs "EPSG:3005 $other_options \
 -progress $overwrite_tab
 
 "$gdalFolder/ogr2ogr" \
 -f PostgreSQL "$pg_connection_string" "$srcFullPath_L2" \
--nln $tableName_L2 $layer_creation_options $other_options \
+-nln $tableName_L2 $layer_creation_options -s_srs "EPSG:3005 $other_options \
 -progress $overwrite_tab
 
 # Join layer 1 and layer 2 into the final table
