@@ -25,7 +25,7 @@ SELECT TT_Prepare('translation', 'bc_vri01_cas', '_bc18_cas', 'ab_avi01_cas');
 
 SELECT TT_CreateMappingView('rawfri', 'bc18', 'bc');
 
-Delete existing entries
+--Delete existing entries
 --DELETE FROM casfri50.cas_all WHERE left(cas_id, 4) = 'BC18';
 
 -- Add translated ones
@@ -42,7 +42,7 @@ SELECT TT_Prepare('translation', 'bc_vri01_dst', '_bc18_dst', 'ab_avi01_dst');
 
 SELECT TT_CreateMappingView('rawfri', 'bc18', 1, 'bc', 1);
 
-Delete existing entries
+-- Delete existing entries
 --DELETE FROM casfri50.dst_all WHERE left(cas_id, 4) = 'BC18';
 
 -- Add translated ones
@@ -59,7 +59,7 @@ SELECT TT_Prepare('translation', 'bc_vri01_eco', '_bc18_eco', 'ab_avi01_eco'); -
 
 SELECT TT_CreateMappingView('rawfri', 'bc18', 'bc');
 
-Delete existing entries
+--Delete existing entries
 --DELETE FROM casfri50.eco_all WHERE left(cas_id, 4) = 'BC18';
 
 -- Add translated ones
@@ -79,7 +79,7 @@ WHERE TT_NotEmpty(bc_species_codes);
 BEGIN;
 SELECT TT_Prepare('translation', 'bc_vri01_lyr', '_bc18_lyr', 'ab_avi01_lyr'); -- used for both BC08 and bc18, layer 1 and 2
 
-Delete existing entries
+-- Delete existing entries
 --DELETE FROM casfri50.lyr_all WHERE left(cas_id, 4) = 'BC18';
 
 -- Add translated ones
@@ -106,7 +106,7 @@ COMMIT;
 BEGIN;
 SELECT TT_Prepare('translation', 'bc_vri01_nfl', '_bc18_nfl', 'ab_avi01_nfl'); -- used for both BC08 and bc18
 
-Delete existing entries
+-- Delete existing entries
 --DELETE FROM casfri50.nfl_all WHERE left(cas_id, 4) = 'BC18';
 
 -- layer 1
