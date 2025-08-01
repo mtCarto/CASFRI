@@ -30,10 +30,10 @@ srcFileName=VEG_COMP_LYR
 
 ###########SRC file is not unzipped or projection data###############
 
-srcFileName_L1=${srcFileName}_L1_POLY
+srcFileName_L1=${srcFileName}_L1_POLY_2024
 srcFullPath_L1="/vsizip/$friDir/BC/$inventoryID/data/inventory/${srcFileName_L1}.gdb.zip/${srcFileName_L1}.gdb"
 
-srcFileName_L2=${srcFileName}_L2_POLY
+srcFileName_L2=${srcFileName}_L2_POLY_2024
 srcFullPath_L2="/vsizip/$friDir/BC/$inventoryID/data/inventory/${srcFileName_L2}.gdb.zip/${srcFileName_L2}.gdb"
 
 ###########SRC file is unzipped ##########################
