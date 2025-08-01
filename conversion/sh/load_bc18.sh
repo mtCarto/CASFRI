@@ -64,12 +64,12 @@ tableName_L2=${fullTargetTableName}_layer_2
 
 "$gdalFolder/ogr2ogr" \
 -f PostgreSQL "$pg_connection_string" "$srcFullPath_L1" \
--nln $tableName_L1 $layer_creation_options -s_srs "EPSG:3005 $other_options \
+-nln $tableName_L1 $layer_creation_options -s_srs "EPSG:3005" $other_options \
 -progress $overwrite_tab
 
 "$gdalFolder/ogr2ogr" \
 -f PostgreSQL "$pg_connection_string" "$srcFullPath_L2" \
--nln $tableName_L2 $layer_creation_options -s_srs "EPSG:3005 $other_options \
+-nln $tableName_L2 $layer_creation_options -s_srs "EPSG:3005" $other_options \
 -progress $overwrite_tab
 
 # Join layer 1 and layer 2 into the final table
