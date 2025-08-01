@@ -29,10 +29,20 @@ inventoryID=BC18
 srcFileName=VEG_COMP_LYR
 
 srcFileName_L1=${srcFileName}_L1_POLY
-srcFullPath_L1="/vsizip/$friDir/BC/$inventoryID/data/inventory/2024_PROJECTION_${srcFileName_L1}.gdb.zip/${srcFileName_L1}.gdb"
+srcFullPath_L1="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L1}_2024.gdb"
 
 srcFileName_L2=${srcFileName}_L2_POLY
-srcFullPath_L2="/vsizip/$friDir/BC/$inventoryID/data/inventory/2024_PROJECTION_${srcFileName_L2}.gdb.zip/${srcFileName_L2}.gdb"
+srcFullPath_L2="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L2}_2024.gdb"
+
+#############SRC FILE PATH FOR PROJECTION##################
+
+#srcFileName_L1=${srcFileName}_L1_POLY
+#srcFullPath_L1="/vsizip/$friDir/BC/$inventoryID/data/inventory/2024_PROJECTION_${srcFileName_L1}.gdb.zip/${srcFileName_L1}.gdb"
+
+#srcFileName_L2=${srcFileName}_L2_POLY
+#srcFullPath_L2="/vsizip/$friDir/BC/$inventoryID/data/inventory/2024_PROJECTION_${srcFileName_L2}.gdb.zip/${srcFileName_L2}.gdb"
+
+###############################
 
 fullTargetTableName=$targetFRISchema.bc18
 tableName_L1=${fullTargetTableName}_layer_1
@@ -58,7 +68,7 @@ tableName_L2=${fullTargetTableName}_layer_2
 -sql "
 CREATE INDEX ON ${tableName_L2} (feature_id);
 DROP TABLE IF EXISTS ${fullTargetTableName};
-CREATE TABLE ${fullTargetTableName} AS
+CREATE TABLE ${fullTargetTaVEG_COMP_LYR_L1_POLY_2024.gdbbleName} AS
 SELECT '${srcFileName}' AS src_filename,
 '${inventoryID}' AS inventory_id,
 t1.wkb_geometry,
@@ -195,6 +205,9 @@ t1.proj_height_class_cd_1 AS l1_proj_height_class_cd_1,
 t1.proj_height_2 AS l1_proj_height_2,
 t1.proj_height_class_cd_2 AS l1_proj_height_class_cd_2,
 t1.data_source_height_cd AS l1_data_source_height_cd,
+t1.feature_area_sqm,
+t1.feature_length_m,
+t1.geometry_length AS l1_geometry_len,
 t1.geometry_area AS l1_geometry_area,
 t2.layer_id AS l2_layer_id,
 t2.for_cover_rank_cd AS l2_for_cover_rank_cd,
