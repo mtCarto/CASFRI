@@ -40,8 +40,6 @@
 -- 1000000-1500000 sources rows -->  800 test rows
 -- 1500000-2000000 sources rows -->  900 test rows
 -- 2000000-more    sources rows --> 1000 test rows
-
-SET search_path = casfri50_test, casfri50, translation, rawfri, public;
 -------------------------------------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS casfri50_test;
 -------------------------------------------------------
@@ -127,7 +125,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS species_code_mapping_pc02_species_codes_idx
 ON translation.species_code_mapping (pc02_species_codes)
 WHERE TT_NotEmpty(pc02_species_codes);
 
-/*------------------------
+------------------------
 SELECT TT_CreateMappingView('rawfri', 'ab03', 1, 'ab', 1, 250, NULL, 'lyr'); -- Generates about 200 (204) LYR rows
 CREATE TABLE casfri50_test.lyr_all_new AS 
 SELECT * FROM TT_Translate_ab_lyr_test('rawfri', 'ab03_l1_to_ab_l1_map_250_lyr');
@@ -249,13 +247,13 @@ INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_bc_lyr_test('rawfri', 'bc12_l2_to_bc_l1_map_30000_lyr');
 */------------------------
 SELECT TT_CreateMappingView('rawfri', 'bc18', 1, 'bc', 1, 1120, NULL, 'lyr'); -- Generates about 1000 (999) LYR rows
-CREATE TABLE casfri50_test.lyr_all_new AS 
+INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_bc_lyr_test('rawfri', 'bc18_l1_to_bc_l1_map_1120_lyr');
 ------------------------
 SELECT TT_CreateMappingView('rawfri', 'bc18', 2, 'bc', 1, 30000, NULL, 'lyr'); -- Generates about 1000 (1001) LYR rows
 INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_bc_lyr_test('rawfri', 'bc18_l2_to_bc_l1_map_30000_lyr');
-/*------------------------
+------------------------
 SELECT TT_CreateMappingView('rawfri', 'nt01', 1, 'nt', 1, 600, NULL, 'lyr'); -- Generates about 500 (522) LYR rows
 INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_nt_lyr_test('rawfri', 'nt01_l1_to_nt_l1_map_600_lyr');
@@ -583,7 +581,7 @@ SELECT * FROM TT_Translate_pc_wbnp_lyr_test('rawfri', 'pc02_l6_to_pc_wbnp_l1_map
 SELECT TT_CreateMappingView('rawfri', 'pc02', 7, 'pc_wbnp', 1, NULL, NULL, 'lyr'); -- Generates 200 (7) LYR rows
 INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_pc_wbnp_lyr_test('rawfri', 'pc02_l7_to_pc_wbnp_l1_map_lyr');
-*/------------------------
+------------------------
 -- Create an ordered VIEW on the LYR table
 CREATE OR REPLACE VIEW casfri50_test.lyr_all_new_ordered AS
 SELECT * FROM casfri50_test.lyr_all_new

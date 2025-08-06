@@ -41,8 +41,6 @@
 -- 1500000-2000000 sources rows -->  900 test rows
 -- 2000000-more    sources rows --> 1000 test rows
 
-SET search_path = casfri50_test, casfri50, translation, rawfri, public; 
-
 -------------------------------------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS casfri50_test;
 ------------------------------------------------------------------------------
@@ -70,7 +68,7 @@ SELECT TT_Prepare('translation', 'pc_wbnp01_cas', '_pc_wbnp_cas_test', 'ab_avi01
 SELECT TT_Prepare('translation', 'yt_yvi02_cas', '_yt_yvi02_cas_test', 'ab_avi01_cas'); 
 ------------------------
 DROP TABLE IF EXISTS casfri50_test.cas_all_new CASCADE;
-/*----------------------
+------------------------
 SELECT TT_CreateMappingView('rawfri', 'ab03', 'ab', 200, NULL, 'cas');
 CREATE TABLE casfri50_test.cas_all_new AS 
 SELECT * FROM TT_Translate_ab_cas_test('rawfri', 'ab03_l1_to_ab_l1_map_200_cas');
@@ -135,12 +133,10 @@ SELECT TT_CreateMappingView('rawfri', 'bc12', 'bc', 1000, NULL, 'cas');
 INSERT INTO casfri50_test.cas_all_new 
 SELECT * FROM TT_Translate_bc_cas_test('rawfri', 'bc12_l1_to_bc_l1_map_1000_cas');
 ------------------------
-*/
 SELECT TT_CreateMappingView('rawfri', 'bc18', 'bc', 1000, NULL, 'cas');
-CREATE TABLE casfri50_test.cas_all_new AS
+INSERT INTO casfri50_test.cas_all_new 
 SELECT * FROM TT_Translate_bc_cas_test('rawfri', 'bc18_l1_to_bc_l1_map_1000_cas');
 ------------------------
-/*
 SELECT TT_CreateMappingView('rawfri', 'nt01', 'nt', 500, NULL, 'cas');
 INSERT INTO casfri50_test.cas_all_new 
 SELECT * FROM TT_Translate_nt_cas_test('rawfri', 'nt01_l1_to_nt_l1_map_500_cas');
@@ -272,7 +268,7 @@ SELECT * FROM TT_Translate_pc_panp_cas_test('rawfri', 'pc01_l1_to_pc_panp_l1_map
 SELECT TT_CreateMappingView('rawfri', 'pc02', 'pc_wbnp', 200, NULL, 'cas');
 INSERT INTO casfri50_test.cas_all_new 
 SELECT * FROM TT_Translate_pc_wbnp_cas_test('rawfri', 'pc02_l1_to_pc_wbnp_l1_map_200_cas');
------------------------- */
+------------------------
 -- Create an ordered VIEW on the CAS table
 CREATE OR REPLACE VIEW casfri50_test.cas_all_new_ordered AS
 SELECT * FROM casfri50_test.cas_all_new

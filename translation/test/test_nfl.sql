@@ -41,8 +41,6 @@
 -- 1500000-2000000 sources rows -->  900 test rows
 -- 2000000-more    sources rows --> 1000 test rows
 
-SET search_path = casfri50_test, casfri50, translation, rawfri, public
-
 -------------------------------------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS casfri50_test;
 -------------------------------------------------------
@@ -70,7 +68,7 @@ SELECT TT_Prepare('translation', 'pc_wbnp01_nfl', '_pc_wbnp_nfl_test', 'ab_avi01
 SELECT TT_Prepare('translation', 'yt_yvi02_nfl', '_yt_yvi02_nfl_test', 'ab_avi01_nfl');
 ------------------------
 DROP TABLE IF EXISTS casfri50_test.nfl_all_new CASCADE;
-/*------------------------
+------------------------
 SELECT TT_CreateMappingView('rawfri', 'ab03', 3, 'ab', 1, 1120, NULL, 'nfl'); -- Generates about 200 (198) NFL rows
 CREATE TABLE casfri50_test.nfl_all_new AS 
 SELECT * FROM TT_Translate_ab_nfl_test('rawfri', 'ab03_l3_to_ab_l1_map_1120_nfl');
@@ -210,7 +208,7 @@ SELECT * FROM TT_Translate_bc_nfl_test('rawfri', 'bc18_l5_to_bc_l1_map_16000_nfl
 SELECT TT_CreateMappingView('rawfri', 'bc18', 3, 'bc', 1, 6200, NULL, 'nfl'); -- Generates about 1000 (1042) NFL rows
 INSERT INTO casfri50_test.nfl_all_new
 SELECT * FROM TT_Translate_bc_nfl_test('rawfri', 'bc18_l3_to_bc_l1_map_6200_nfl');
-/*------------------------
+------------------------
 SELECT TT_CreateMappingView('rawfri', 'nt01', 3, 'nt', 1, 3350, NULL, 'nfl'); -- Generates about 500 (509) NFL rows
 INSERT INTO casfri50_test.nfl_all_new
 SELECT * FROM TT_Translate_nt_nfl_test('rawfri', 'nt01_l3_to_nt_l1_map_3350_nfl');

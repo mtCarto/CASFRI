@@ -36,30 +36,11 @@ srcFullPath_L1="/vsizip/$friDir/BC/$inventoryID/data/inventory/${srcFileName_L1}
 srcFileName_L2=${srcFileName}_L2_POLY_2024
 srcFullPath_L2="/vsizip/$friDir/BC/$inventoryID/data/inventory/${srcFileName_L2}.gdb.zip/${srcFileName_L2}.gdb"
 
-###########SRC file is unzipped ##########################
-
-#srcFileName_L1=${srcFileName}_L1_POLY
-#srcFullPath_L1="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L1}_2024.gdb"
-
-#srcFileName_L2=${srcFileName}_L2_POLY
-#srcFullPath_L2="$friDir/BC/$inventoryID/data/inventory/${srcFileName_L2}_2024.gdb"
-
-#############SRC FILE PATH FOR PROJECTION##################
-
-#srcFileName_L1=${srcFileName}_L1_POLY
-#srcFullPath_L1="/vsizip/$friDir/BC/$inventoryID/data/inventory/2024_PROJECTION_${srcFileName_L1}.gdb.zip/${srcFileName_L1}.gdb"
-
-#srcFileName_L2=${srcFileName}_L2_POLY
-#srcFullPath_L2="/vsizip/$friDir/BC/$inventoryID/data/inventory/2024_PROJECTION_${srcFileName_L2}.gdb.zip/${srcFileName_L2}.gdb"
-
-###############################
-
 fullTargetTableName=$targetFRISchema.bc18
 tableName_L1=${fullTargetTableName}_layer_1
 tableName_L2=${fullTargetTableName}_layer_2
 
 ########################################## Process ######################################
-## Add  to tablename to run projection files : -s_srs "EPSG:3005"
 # Run ogr2ogr to load all 3 tables
 
 "$gdalFolder/ogr2ogr" \
