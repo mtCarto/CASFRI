@@ -4053,7 +4053,34 @@ RETURNS boolean AS $$
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------
+-- TT_nl_nli02_wetland_validation
+--
+-- Check for valid 4 letter code.
+--
+-- e.g. TT_nl_nli02_wetland_validation(landtype, per1, '1')
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nl_nli02_wetland_validation(text, text, text, text);
+CREATE OR REPLACE FUNCTION TT_nl_nli02_wetland_validation(
+  nfcode text,
+  sitecode text,
+  species_comp text,
+  retCharPos text
+)
+RETURNS boolean AS $$
+  DECLARE
+    _wetland_code text;
+    _wetland_char text;
+  BEGIN
+    _wetland_code = TT_nl_nli02_wetland_code(nfcode, sitecode, species_comp);
+    _wetland_char = substring(_wetland_code from retCharPos::int for 1);
+    IF _wetland_char IS NULL OR _wetland_char = '-' THEN
+      RETURN FALSE;
+    END IF;
+    RETURN TRUE;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- TT_bc_vri01_wetland_validation
 --
