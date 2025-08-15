@@ -7112,7 +7112,33 @@ RETURNS text AS $$
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------
+-- TT_nl_nli02_productivity_type_translation
+--
+-- stand_id text,
+-- working_group text
+--
+-- If commercial, return HARVESTABLE, if non-commercial return SCRUB_SHRUB, if treed bog return TREED_MUSKEG.
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nl_nli02_productivity_type_translation(text, text);
+CREATE OR REPLACE FUNCTION TT_nl_nli02_productivity_type_translation(
+  stand_id text,
+  foresttype text
+)
+RETURNS text AS $$
+  BEGIN
+    IF stand_id = 'TBOG' THEN
+      RETURN 'TREED_MUSKEG';
+    ELSIF foresttype = '1' THEN
+      RETURN 'HARVESTABLE';
+    ELSIF foresttype = '2' THEN
+      RETURN 'SCRUB_SHRUB';
+    ELSE
+      RETURN NULL;
+    END IF;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- TT_nl_nli01_origin_upper_translation(text, text)
 --
