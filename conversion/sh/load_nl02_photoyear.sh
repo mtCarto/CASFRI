@@ -34,7 +34,7 @@ fullTargetTableName=$targetFRISchema.nl02_photoYear
 -sql "
 DROP TABLE IF EXISTS ${targetFRISchema}.new_nl02_photoyear;
 CREATE TABLE ${targetFRISchema}.new_nl02_photoyear AS
-SELECT ST_MakeValid(wkb_geometry) AS wkb_geometry, year, ogc_fid
+SELECT ST_MakeValid(wkb_geometry) AS wkb_geometry, photoyear AS year, ogc_fid
 FROM ${fullTargetTableName};
 DROP TABLE IF EXISTS ${fullTargetTableName};
 ALTER TABLE ${targetFRISchema}.new_nl02_photoyear RENAME TO nl02_photoyear;
