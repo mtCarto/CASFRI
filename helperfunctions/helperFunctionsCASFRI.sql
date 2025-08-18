@@ -3905,7 +3905,32 @@ RETURNS boolean AS $$
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- TT_nl_nli02_origin_newfoundland_validation
+--
+-- density_code text,
+-- src_filename text
+--
+-- Catch the error case where polygon is in Newfoundland and density code is 9 or 10
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nl_nli02_origin_newfoundland_validation(text, text);
+CREATE OR REPLACE FUNCTION TT_nl_nli02_origin_newfoundland_validation(
+  age_code text
+)
+RETURNS boolean AS $$
+  DECLARE
+    age_code text;
+  BEGIN
 
+       IF age_code IN('9') THEN
+         RETURN FALSE;
+       END IF;
+  
+    RETURN TRUE;
+  
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- TT_nl_nli01_crown_closure_validation
 --
@@ -7848,7 +7873,32 @@ RETURNS text AS $$
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------
+-- TT_nl_nli02_wetland_translation
+--
+-- Assign 4 letter wetland character code, then return the requested character (1-4)
+--
+-- e.g. TT_nl_nli02_wetland_translation(landtype, per1, '1')
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nl_nli02_wetland_translation(text, text, text, text);
+CREATE OR REPLACE FUNCTION TT_nl_nli02_wetland_translation(
+  nfcode text,
+  sitecode text,
+  species_comp text,
+  ret_char text
+)
+RETURNS text AS $$
+  DECLARE
+    _wetland_code text;
+  BEGIN
+    _wetland_code = TT_nl_nli02_wetland_code(nfcode, sitecode, species_comp);
+    IF _wetland_code IS NULL THEN
+      RETURN NULL;
+    END IF;
+    RETURN TT_wetland_code_translation(_wetland_code, ret_char);
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- TT_bc_vri01_wetland_translation
 --
