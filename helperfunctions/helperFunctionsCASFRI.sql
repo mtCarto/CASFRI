@@ -1592,7 +1592,7 @@ RETURNS text AS $$
 				  WHEN rulelc = 'yvi03_hascountofnotnull' THEN '-8886'
                   ELSE
                    TT_DefaultErrorCode(rulelc, targetTypelc) END;
-    ELSIF targetTypelc = 'geometry' THEN
+    ELSIF targetTypelc = 'geometry' THENtt_nl_nli02_wetland_code
       RETURN CASE WHEN rulelc = 'projectrule1' THEN NULL
                   ELSE TT_DefaultErrorCode(rulelc, targetTypelc) END;
     ELSE
@@ -1608,7 +1608,6 @@ RETURNS text AS $$
                   WHEN rulelc = 'fvi01_stand_structure_validation' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'qc_prg4_lengthmatchlist' THEN 'NOT_IN_SET'
                   WHEN rulelc = 'nl_nli01_isforest' THEN 'NOT_APPLICABLE'
-                  WHEN rulelc = 'nl_nli02_isforest' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'nl_nli01_iscommercial' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'nl_nli01_isnoncommercial' THEN 'NOT_APPLICABLE'
                   WHEN rulelc = 'nl_nli02_isforest' THEN 'NOT_APPLICABLE'
@@ -1722,7 +1721,29 @@ RETURNS text AS $$
          END;
 $$ LANGUAGE sql IMMUTABLE;
 -------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------
+-- TT_nl_nli02_wetland_code(text, text, text)
+--
+-- Run logic to generate 4 letter code
+-------------------------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nl_nli02_wetland_code(text, text, text);
+CREATE OR REPLACE FUNCTION TT_nl_nli02_wetland_code(
+  nfcode text,
+  sitecode text,
+  species_comp text
+)
+RETURNS text AS $$
+	SELECT CASE
+           WHEN nfcode='BOG' THEN 'BONS'
+           WHEN nfcode='WBOG' THEN 'MONG'
+           WHEN nfcode='TBOG' THEN 'BTNN'
+           WHEN species_comp IN('BSTL', 'BSTLBF', 'BSTLWB' ) THEN 'STNN'
+           WHEN species_comp IN('TL', 'TLBF','TLWB', 'TLBS', 'TLBSBF', 'TLBSWB') THEN 'STNN'
+           WHEN species_comp IN('WBTL', 'WBTLBS', 'WBBSTL') THEN 'STNN'
+           ELSE NULL
+         END;
+$$ LANGUAGE sql IMMUTABLE;
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- TT_ab_avi01_wetland_code(text, text, text)
 --
