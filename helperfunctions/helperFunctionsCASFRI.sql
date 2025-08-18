@@ -3874,7 +3874,37 @@ RETURNS boolean AS $$
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- TT_nl_nli02_origin_lower_validation
+--
+-- age_class text,
+-- src_filename text
+--
+-- For age class 7 in Newfoundland upper age bound is 121+ which means lower origin
+-- is unknown.
+-- Same for age class 9 in Labrador where age class is 161+.
+------------------------------------------------------------
+--DROP FUNCTION IF EXISTS TT_nl_nli02_origin_lower_validation(text);
+CREATE OR REPLACE FUNCTION TT_nl_nli02_origin_lower_validation(
+  age_class text
+)
+RETURNS boolean AS $$
+  DECLARE
+    age_class text;
+  BEGIN
+  
+     IF age_class::int = 7 THEN
+       RETURN FALSE;
+     END IF;
+  
+    --IF age_class::int = 9 THEN
+      --RETURN FALSE;
+    --END IF;
 
+    RETURN TRUE;
+  END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- TT_nl_nli01_origin_newfoundland_validation
 --
@@ -3905,6 +3935,7 @@ RETURNS boolean AS $$
   END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
+
 -------------------------------------------------------------------------------
 -- TT_nl_nli02_origin_newfoundland_validation
 --
