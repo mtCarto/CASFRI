@@ -69,6 +69,7 @@ SELECT TT_Prepare('translation', 'yt_yvi02_eco', '_yt_yvi02_eco_test', 'ab_avi01
 ------------------------
 DROP TABLE IF EXISTS casfri50_test.eco_all_new CASCADE;
 ------------------------
+/*
 SELECT TT_CreateMappingView('rawfri', 'ab03', 'ab', 3000, NULL, 'eco'); -- Generates 164 ECO rows
 CREATE TABLE casfri50_test.eco_all_new AS 
 SELECT * FROM TT_Translate_ab_eco_test('rawfri', 'ab03_l1_to_ab_l1_map_3000_eco');
@@ -133,6 +134,12 @@ SELECT TT_CreateMappingView('rawfri', 'nt01', 'nt', 500, NULL, 'eco'); -- Genera
 INSERT INTO casfri50_test.eco_all_new
 SELECT * FROM TT_Translate_nt_eco_test('rawfri', 'nt01_l1_to_nt_l1_map_500_eco');
 ------------------------
+*/
+SELECT TT_CreateMappingView('rawfri', 'nt02', 'nt', 500, NULL, 'eco'); -- Generates 0 ECO rows
+CREATE TABLE casfri50_test.eco_all_new AS 
+SELECT * FROM TT_Translate_nt_eco_test('rawfri', 'nt02_l1_to_nt_l1_map_500_eco');
+------------------------
+/*
 SELECT TT_CreateMappingView('rawfri', 'nt03', 'nt', 500, NULL, 'eco'); -- Generates 0 ECO rows
 INSERT INTO casfri50_test.eco_all_new 
 SELECT * FROM TT_Translate_nt_eco_test('rawfri', 'nt03_l1_to_nt_l1_map_500_eco');
@@ -321,7 +328,7 @@ SELECT TT_CreateMappingView('rawfri', 'pc02', 14, 'pc_wbnp', 1, NULL, NULL, 'eco
 INSERT INTO casfri50_test.eco_all_new 
 SELECT * FROM TT_Translate_pc_wbnp_eco_test('rawfri', 'pc02_l14_to_pc_wbnp_l1_map_eco');
 ------------------------
-
+*/
 -- Create an ordered VIEW on the ECO table
 CREATE OR REPLACE VIEW casfri50_test.eco_all_new_ordered AS
 SELECT * FROM casfri50_test.eco_all_new

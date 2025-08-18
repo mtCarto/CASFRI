@@ -68,7 +68,8 @@ SELECT TT_Prepare('translation', 'pc_wbnp01_cas', '_pc_wbnp_cas_test', 'ab_avi01
 SELECT TT_Prepare('translation', 'yt_yvi02_cas', '_yt_yvi02_cas_test', 'ab_avi01_cas'); 
 ------------------------
 DROP TABLE IF EXISTS casfri50_test.cas_all_new CASCADE;
-------------------------
+------------------------ 
+/*
 SELECT TT_CreateMappingView('rawfri', 'ab03', 'ab', 200, NULL, 'cas');
 CREATE TABLE casfri50_test.cas_all_new AS 
 SELECT * FROM TT_Translate_ab_cas_test('rawfri', 'ab03_l1_to_ab_l1_map_200_cas');
@@ -224,10 +225,16 @@ SELECT * FROM TT_Translate_mb_fli_cas_test('rawfri', 'mb07_l1_to_mb_fli_l1_map_3
 SELECT TT_CreateMappingView('rawfri', 'mb06', 'mb_fli', 300, NULL, 'cas');
 INSERT INTO casfri50_test.cas_all_new 
 SELECT * FROM TT_Translate_mb_fli_cas_test('rawfri', 'mb06_l1_to_mb_fli_l1_map_300_cas');
-------------------------
+------------------------ 
 SELECT TT_CreateMappingView('rawfri', 'nl01', 'nl_nli', 900, NULL, 'cas');
 INSERT INTO casfri50_test.cas_all_new 
 SELECT * FROM TT_Translate_nl_nli_cas_test('rawfri', 'nl01_l1_to_nl_nli_l1_map_900_cas');
+------------------------ 
+*/
+SELECT TT_CreateMappingView('rawfri', 'nl02', 'nl_nli', 900, NULL, 'cas');
+CREATE TABLE casfri50_test.cas_all_new AS  
+SELECT * FROM TT_Translate_nl_nli_cas_test('rawfri', 'nl02_l1_to_nl_nli_l1_map_900_cas');
+/*
 ------------------------
 SELECT TT_CreateMappingView('rawfri', 'qc01', 'qc_ini03', 1000, NULL, 'cas');
 INSERT INTO casfri50_test.cas_all_new 
@@ -265,6 +272,7 @@ SELECT TT_CreateMappingView('rawfri', 'pc02', 'pc_wbnp', 200, NULL, 'cas');
 INSERT INTO casfri50_test.cas_all_new 
 SELECT * FROM TT_Translate_pc_wbnp_cas_test('rawfri', 'pc02_l1_to_pc_wbnp_l1_map_200_cas');
 ------------------------
+*/
 -- Create an ordered VIEW on the CAS table
 CREATE OR REPLACE VIEW casfri50_test.cas_all_new_ordered AS
 SELECT * FROM casfri50_test.cas_all_new

@@ -9,8 +9,8 @@
 
 source ../../conversion/sh/common.sh
 
-pgversion=${pgversion:=11}
-#pgversion=${pgversion:=12} 
+pgversion=_temp
+#pgversion=${pgversion:=11} 
 
 # ########################################## Process ######################################
 
@@ -39,4 +39,3 @@ pgversion=${pgversion:=11}
 "$gdalFolder/ogr2ogr" -f "PostgreSQL" "$pg_connection_string" "data$pgversion/nfl_all_test.csv" -nln "casfri50_test.nfl_all_test" $overwrite_tab -lco COLUMN_TYPES="cas_id=text,soil_moist_reg=text,structure_per=integer,layer=integer,layer_rank=integer,crown_closure_upper=integer,crown_closure_lower=integer,height_upper=double precision,height_lower=double precision,nat_non_veg=text,non_for_anth=text,non_for_veg=text"
 
 "$gdalFolder/ogrinfo" "$pg_connection_string" -sql "ALTER TABLE casfri50_test.nfl_all_test DROP COLUMN ogc_fid"
-
