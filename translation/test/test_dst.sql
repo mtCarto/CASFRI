@@ -40,13 +40,13 @@
 -- 1000000-1500000 sources rows -->  800 test rows
 -- 1500000-2000000 sources rows -->  900 test rows
 -- 2000000-more    sources rows --> 1000 test rows
-
+SET search_path = translation, casfri50_test, casfri50, rawfri, public;
 -------------------------------------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS casfri50_test;
 -------------------------------------------------------
 -- Translate all DST tables into a common table
 -------------------------------------------------------
-SELECT TT_Prepare('translation', 'ab_avi01_dst', '_ab_dst_test');
+/*SELECT TT_Prepare('translation', 'ab_avi01_dst', '_ab_dst_test');
 SELECT TT_Prepare('translation', 'nb_nbi01_dst', '_nb_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'bc_vri01_dst', '_bc_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'nt_fvi01_dst', '_nt_dst_test', 'ab_avi01_dst');
@@ -59,11 +59,15 @@ SELECT TT_Prepare('translation', 'pe_pei01_dst', '_pe_dst_test', 'ab_avi01_dst')
 SELECT TT_Prepare('translation', 'mb_fri01_dst', '_mb_fri_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'mb_fli01_dst', '_mb_fli_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'nl_nli01_dst', '_nl_nli_dst_test', 'ab_avi01_dst');
+*/
+SELECT TT_Prepare('translation', 'nl_nli02_dst', '_nl_nli02_dst_test', 'ab_avi01_dst');
+/*
 SELECT TT_Prepare('translation', 'qc_ini03_dst', '_qc_ini03_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'qc_ini04_dst', '_qc_ini04_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'qc_ipf05_dst', '_qc_ipf05_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'pc_wbnp01_dst', '_pc_wbnp01_dst_test', 'ab_avi01_dst');
 SELECT TT_Prepare('translation', 'yt_yvi02_dst', '_yt_yvi02_dst_test', 'ab_avi01_dst');
+*/
 ------------------------
 DROP TABLE IF EXISTS casfri50_test.dst_all_new CASCADE;
 ------------------------
@@ -231,11 +235,10 @@ SELECT * FROM TT_Translate_mb_fli_dst_test('rawfri', 'mb07_l1_to_mb_fli_l1_map_8
 SELECT TT_CreateMappingView('rawfri', 'nl01', 1, 'nl_nli', 1, 20000, NULL, 'dst'); -- Generates about 900 (955) DST rows
 INSERT INTO casfri50_test.dst_all_new 
 SELECT * FROM TT_Translate_nl_nli_dst_test('rawfri', 'nl01_l1_to_nl_nli_l1_map_20000_dst');
-------------------------
-*/
-SELECT TT_CreateMappingView('rawfri', 'nl02', 1, 'nl_nli', 1, 20000, NULL, 'dst'); -- Generates about 900 (955) DST rows
-CREATE TABLE casfri50_test.dst_all_new AS
-SELECT * FROM TT_Translate_nl_nli_dst_test('rawfri', 'nl02_l1_to_nl_nli_l1_map_20000_dst');
+------------------------*/
+SELECT TT_CreateMappingView('rawfri', 'nl02', 1, 'nl_nli2', 1, 20000, NULL, 'dst'); -- Generates about 900 (955) DST rows
+
+CREATE TABLE casfri50_test.dst_all_new AS (SELECT * FROM TT_Translate_nl_nli02_dst_test('rawfri', 'nl02_l1_to_nl_nli2_l1_map_20000_dst'));
 ------------------------
 /*
 SELECT TT_CreateMappingView('rawfri', 'qc01', 1, 'qc_ini03', 1, 2500, NULL, 'dst'); -- Generates about 1000 (1054) DST rows
