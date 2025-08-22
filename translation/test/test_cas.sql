@@ -46,6 +46,7 @@ CREATE SCHEMA IF NOT EXISTS casfri50_test;
 ------------------------------------------------------------------------------
 -- Translate all CAS tables into a common table
 -------------------------------------------------------
+
 SELECT TT_Prepare('translation', 'ab_avi01_cas', '_ab_cas_test');
 SELECT TT_Prepare('translation', 'nb_nbi01_cas', '_nb_cas_test', 'ab_avi01_cas');
 SELECT TT_Prepare('translation', 'bc_vri01_cas', '_bc_cas_test', 'ab_avi01_cas');
@@ -68,6 +69,7 @@ SELECT TT_Prepare('translation', 'pc_panp01_cas', '_pc_panp_cas_test', 'ab_avi01
 SELECT TT_Prepare('translation', 'pc_wbnp01_cas', '_pc_wbnp_cas_test', 'ab_avi01_cas');
 SELECT TT_Prepare('translation', 'yt_yvi02_cas', '_yt_yvi02_cas_test', 'ab_avi01_cas'); 
 ------------------------
+
 DROP TABLE IF EXISTS casfri50_test.cas_all_new CASCADE;
 ------------------------ 
 /*
@@ -234,7 +236,7 @@ SELECT * FROM TT_Translate_nl_nli_cas_test('rawfri', 'nl01_l1_to_nl_nli_l1_map_9
 */
 SELECT TT_CreateMappingView('rawfri', 'nl02', 'nl_nli2', 900, NULL, 'cas');
 CREATE TABLE casfri50_test.cas_all_new AS  
-SELECT * FROM TT_Translate_nl_nli_cas_test('rawfri', 'nl02_l1_to_nl_nli2_l1_map_900_cas');
+SELECT * FROM TT_Translate_nl_nli02_cas_test('rawfri', 'nl02_l1_to_nl_nli2_l1_map_900_cas');
 /*
 ------------------------
 SELECT TT_CreateMappingView('rawfri', 'qc01', 'qc_ini03', 1000, NULL, 'cas');

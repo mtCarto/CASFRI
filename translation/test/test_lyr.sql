@@ -483,9 +483,9 @@ INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_nl_nli_lyr_test('rawfri', 'nl01_l1_to_nl_nli_l1_map_1500_lyr');
 ------------------------
 */
-SELECT TT_CreateMappingView('rawfri', 'nl02' 1, 'nl_nli2', 1, 1500, NULL, 'lyr'); -- Generates 900 (964) LYR rows
+SELECT TT_CreateMappingView('rawfri', 'nl02', 1, 'nl_nli2', 1, 1500, NULL, 'lyr'); -- Generates 900 (964) LYR rows
 CREATE TABLE casfri50_test.lyr_all_new AS 
-SELECT * FROM TT_Translate_nl_nli_lyr_test('rawfri', 'nl02_l1_to_nl_nli2_l1_map_1500_lyr');
+SELECT * FROM TT_Translate_nl_nli02_lyr_test('rawfri', 'nl02_l1_to_nl_nli2_l1_map_1500_lyr');
 ------------------------
 /*
 SELECT TT_CreateMappingView('rawfri', 'qc01', 1, 'qc_ini03', 1, 1700, NULL, 'lyr'); -- Generates 1000 (1084) LYR rows
