@@ -128,7 +128,6 @@ ON translation.species_code_mapping (pc02_species_codes)
 WHERE TT_NotEmpty(pc02_species_codes);
 
 ------------------------
-/*
 SELECT TT_CreateMappingView('rawfri', 'ab03', 1, 'ab', 1, 250, NULL, 'lyr'); -- Generates about 200 (204) LYR rows
 CREATE TABLE casfri50_test.lyr_all_new AS 
 SELECT * FROM TT_Translate_ab_lyr_test('rawfri', 'ab03_l1_to_ab_l1_map_250_lyr');
@@ -489,12 +488,10 @@ SELECT TT_CreateMappingView('rawfri', 'nl01', 1, 'nl_nli', 1, 1500, NULL, 'lyr')
 INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_nl_nli_lyr_test('rawfri', 'nl01_l1_to_nl_nli_l1_map_1500_lyr');
 ------------------------
-*/
 SELECT TT_CreateMappingView('rawfri', 'nl02', 1, 'nl_nli2', 1, 1500, NULL, 'lyr'); -- Generates 900 (964) LYR rows
-CREATE TABLE casfri50_test.lyr_all_new AS 
+INSERT INTO casfri50_test.lyr_all_new 
 SELECT * FROM TT_Translate_nl_nli02_lyr_test('rawfri', 'nl02_l1_to_nl_nli2_l1_map_1500_lyr');
 ------------------------
-/*
 SELECT TT_CreateMappingView('rawfri', 'qc01', 1, 'qc_ini03', 1, 1700, NULL, 'lyr'); -- Generates 1000 (1084) LYR rows
 INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_qc_ini03_lyr_test('rawfri', 'qc01_l1_to_qc_ini03_l1_map_1700_lyr');
@@ -591,7 +588,6 @@ SELECT TT_CreateMappingView('rawfri', 'pc02', 7, 'pc_wbnp', 1, NULL, NULL, 'lyr'
 INSERT INTO casfri50_test.lyr_all_new
 SELECT * FROM TT_Translate_pc_wbnp_lyr_test('rawfri', 'pc02_l7_to_pc_wbnp_l1_map_lyr');
 ------------------------
-*/
 -- Create an ordered VIEW on the LYR table
 CREATE OR REPLACE VIEW casfri50_test.lyr_all_new_ordered AS
 SELECT * FROM casfri50_test.lyr_all_new
