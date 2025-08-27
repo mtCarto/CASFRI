@@ -59,7 +59,8 @@ tableName_L2=${fullTargetTableName}_layer_2
 -sql "
 CREATE INDEX ON ${tableName_L2} (feature_id);
 DROP TABLE IF EXISTS ${fullTargetTableName};
-CREATE TABLE ${fullTargetTaVEG_COMP_LYR_L1_POLY_2024.gdbbleName} AS
+CREATE TABLE ${fullTargetTableName} AS
+
 SELECT '${srcFileName}' AS src_filename,
 '${inventoryID}' AS inventory_id,
 t1.wkb_geometry,
@@ -245,5 +246,6 @@ DROP TABLE IF EXISTS ${tableName_L2};
 "
 
 createSQLSpatialIndex=True
+
 
 source ./common_postprocessing.sh
