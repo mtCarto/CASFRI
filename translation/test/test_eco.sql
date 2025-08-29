@@ -153,7 +153,7 @@ INSERT INTO casfri50_test.eco_all_new
 SELECT * FROM TT_Translate_on_eco_test('rawfri', 'on02_l1_to_on_l1_map_1000_eco');
 ------------------------
 SELECT TT_CreateMappingView('rawfri', 'sk01', 'sk_utm', 700, NULL, 'eco'); -- Generates 0 ECO rows
-INSERT INTO casftype filter textri50_test.eco_all_new 
+INSERT INTO casfri50_test.eco_all_new 
 SELECT * FROM TT_Translate_sk_utm_eco_test('rawfri', 'sk01_l1_to_sk_utm_l1_map_700_eco');
 ------------------------
 SELECT TT_CreateMappingView('rawfri', 'sk02', 'sk_sfv', 200, NULL, 'eco'); -- Generates 0 ECO rows
