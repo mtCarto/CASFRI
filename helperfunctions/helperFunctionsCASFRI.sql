@@ -1592,7 +1592,7 @@ RETURNS text AS $$
 				  WHEN rulelc = 'yvi03_hascountofnotnull' THEN '-8886'
                   ELSE
                    TT_DefaultErrorCode(rulelc, targetTypelc) END;
-    ELSIF targetTypelc = 'geometry' THENtt_nl_nli02_wetland_code
+    ELSIF targetTypelc = 'geometry' THEN
       RETURN CASE WHEN rulelc = 'projectrule1' THEN NULL
                   ELSE TT_DefaultErrorCode(rulelc, targetTypelc) END;
     ELSE
