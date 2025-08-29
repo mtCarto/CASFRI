@@ -9,7 +9,7 @@
 
 source ../../conversion/sh/common.sh
 
-pgversion=_temp
+pgversion=${pgversion:=13} 
 #pgversion=${pgversion:=11} 
 
 # ########################################## Process ######################################
