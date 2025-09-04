@@ -20,7 +20,7 @@ source ./common.sh
 
 inventoryID=SK07
 srcFileName=UTM_Inventory_SaskSubmission_CASFRI
-gdbTableName=fpoly
+gdbTableName=UTM_Inventory
 srcFullPath="$friDir/SK/$inventoryID/data/inventory/UTM_Inventory_SaskSubmission_CASFRI.gdb"
 
 fullTargetTableName=$targetFRISchema.sk07
