@@ -89,13 +89,13 @@ SELECT * FROM TT_Translate_sk07_geo_devel('rawfri', 'sk07_l1_to_sk_utm_l1_map_20
 
 
 -- Display original values and translated values side-by-side to compare and debug the translation table
-SELECT b.src_filename, b.inventory_id, b.poly_id, b.ogc_fid, a.cas_id, 
-       b.l1cc, a.crown_closure_lower, a.crown_closure_upper, 
-       b.l1ht, a.height_upper, a.height_lower, 
-       b.l1s1, a.species_1,
-       b.l1pr1, a.species_per_1
-FROM TT_Translate_on01_lyr_devel('rawfri', 'sk07_l1_to_sk_l1_map_200') a, rawfri.sk07_l1_to_sk_l1_map_200 b
-WHERE b.ogc_fid::int = right(a.cas_id, 7)::int;
+SELECT b.src_filename, b.inventory_id, b.map_sheet_id, b.ogc_fid, a.cas_id, 
+       b.d as crown_closure, a.crown_closure_lower, a.crown_closure_upper, 
+       b.height_upper as height, a.height_upper, a.height_lower, 
+       b.sp10, a.species_1,
+       b.sp11, b.sp12, b.sp20, b.sp21, a.species_per_1
+FROM TT_Translate_sk07_lyr_devel('rawfri', 'sk07_l1_to_sk_utm_l1_map_200') a, rawfri.sk07_l1_to_sk_utm_l1_map_200 b
+WHERE b.ogc_fid::int = trim(right(a.cas_id, 7),'x')::int;
 
 --------------------------------------------------------------------------
 SELECT TT_DeleteAllLogs('translation_devel');
