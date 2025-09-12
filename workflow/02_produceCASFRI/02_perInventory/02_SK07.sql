@@ -128,26 +128,26 @@ SELECT * FROM TT_Translate_sk07_geo('rawfri', 'sk07_l1_to_sk_utm_l1_map');
 /*
 SELECT 'cas_all' AS table, count(*) nb
 FROM casfri50.cas_all
-WHERE left(cas_id, 4) = 'SK01'
+WHERE left(cas_id, 4) = 'SK07'
 UNION ALL
 SELECT 'dst_all', count(*) nb
 FROM casfri50.dst_all
-WHERE left(cas_id, 4) = 'SK01'
+WHERE left(cas_id, 4) = 'SK07'
 UNION ALL
 SELECT 'eco_all', count(*) nb
 FROM casfri50.eco_all
-WHERE left(cas_id, 4) = 'SK01'
+WHERE left(cas_id, 4) = 'SK07'
 UNION ALL
 SELECT 'lyr_all', count(*) nb
 FROM casfri50.lyr_all
-WHERE left(cas_id, 4) = 'SK01'
+WHERE left(cas_id, 4) = 'SK07'
 UNION ALL
 SELECT 'nfl_all', count(*) nb
 FROM casfri50.nfl_all
-WHERE left(cas_id, 4) = 'SK01'
+WHERE left(cas_id, 4) = 'SK07'
 UNION ALL
 SELECT 'geo_all', count(*) nb
 FROM casfri50.geo_all
-WHERE left(cas_id, 4) = 'SK01';
+WHERE left(cas_id, 4) = 'SK07';
 */
 --------------------------------------------------------------------------
