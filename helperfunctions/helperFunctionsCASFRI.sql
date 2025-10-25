@@ -2538,69 +2538,26 @@ RETURNS text AS $$
     _avg_ht = avg_ht::int;
     _smr = upper(smr);
 	RETURN CASE
-           WHEN _smr='A' THEN 'MONG'
-           WHEN _smr='W' AND class_='S' THEN 'SONS'
+           WHEN left(_smr,1)='A' THEN 'MONG'
+           WHEN left(_smr,1) AND (class_='S' OR class_ in ('Tall Shrub', 'Low Shrub', 'Tall Shrub, Open', 'Tall Shrub, Closed')) THEN 'SONS'
            WHEN _smr='W' AND class_='H' THEN 'MONG'
            WHEN _smr='W' AND class_='M' THEN 'SONS'
            WHEN _smr='W' AND class_='C' THEN 'FONS'
-           WHEN _smr='W' AND (sp1='SB' AND _sp1_per=100) AND _cc<50 AND _avg_ht<12 THEN 'BTNN'
-           WHEN _smr='W' AND (sp1='SB' AND _sp1_per=100) AND (_cc >= 50  AND  _cc < 70)  AND _avg_ht >= 12 THEN 'STNN'
-           WHEN _smr='W' AND (sp1='SB' AND _sp1_per=100) AND _cc >= 70  AND _avg_ht >= 12 THEN 'SFNN'
-           WHEN _smr='W' AND (sp1='SB' OR sp1='L') AND  (sp2='SB' OR sp2='L') AND _cc <= 50  AND _avg_ht < 12 THEN 'FTNN'
-           WHEN _smr='W' AND (sp1='SB' OR sp1='L' OR sp1='W') AND (sp2='SB' OR sp2='L' OR sp2='W') AND _cc > 50  AND _avg_ht > 12 THEN 'STNN'
-           WHEN _smr='W' AND (sp1='L' AND _sp1_per=100) AND _cc <= 50 THEN 'FTNN'
-           WHEN _smr='W' AND (sp1='L' OR sp1='W') AND _sp1_per=100 AND (_cc > 50  AND _cc < 70) THEN 'STNN'
-           WHEN _smr='W' AND (sp1='L' OR sp1='W') AND _sp1_per=100 AND (_cc >= 70) THEN 'SFNN'
-           WHEN _smr='W' THEN 'W---'
+           WHEN left(_smr,1) AND (sp1='SB' AND _sp1_per=100) AND _cc<50 AND _avg_ht<12 THEN 'BTNN'
+           WHEN left(_smr,1) AND (sp1='SB' AND _sp1_per=100) AND (_cc >= 50  AND  _cc < 70)  AND _avg_ht >= 12 THEN 'STNN'
+           WHEN left(_smr,1) AND (sp1='SB' AND _sp1_per=100) AND _cc >= 70  AND _avg_ht >= 12 THEN 'SFNN'
+           WHEN left(_smr,1) AND (sp1='SB' OR sp1='L') AND  (sp2='SB' OR sp2='L') AND _cc <= 50  AND _avg_ht < 12 THEN 'FTNN'
+           WHEN left(_smr,1) AND (sp1='SB' OR sp1='L' OR sp1='W') AND (sp2='SB' OR sp2='L' OR sp2='W') AND _cc > 50  AND _avg_ht > 12 THEN 'STNN'
+           WHEN left(_smr,1) AND (sp1='L' AND _sp1_per=100) AND _cc <= 50 THEN 'FTNN'
+           WHEN left(_smr,1) AND (sp1='L' OR sp1='W') AND _sp1_per=100 AND (_cc > 50  AND _cc < 70) THEN 'STNN'
+           WHEN left(_smr,1) AND (sp1='L' OR sp1='W') AND _sp1_per=100 AND (_cc >= 70) THEN 'SFNN'
+           WHEN left(_smr,1) THEN 'W---'
            ELSE NULL
          END;
   END
 $$ LANGUAGE plpgsql IMMUTABLE;
 -------------------------------------------------------------------------------
 
--------------------------------------------------------------------------------
--- TT_yt_wetland_code(text, text, text)
---
--- Return 4-character wetland code
--------------------------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_yt04_wetland_string_code(text, text, text, text, text, text, text);
-CREATE OR REPLACE FUNCTION TT_yt04_wetland_string_code(
-  smr text,
-  cc text,
-  class_ text,
-  sp1 text,
-  sp2 text,
-  sp1_per text,
-  avg_ht text
-)
-RETURNS text AS $$
-  DECLARE
-    _cc int;
-    _sp1_per int;
-    _avg_ht int;
-  BEGIN
-    _cc = cc::int;
-    _sp1_per = sp1_per::int;
-    _avg_ht = avg_ht::int;
-	RETURN CASE
-           WHEN smr='Aquatic' THEN 'MONG'
-           WHEN smr='Wet' AND class_ in ('Tall Shrub', 'Low Shrub', 'Tall Shrub, Open', 'Tall Shrub, Closed') THEN 'SONS'
-           WHEN smr='Wet' AND (sp1='SB' AND _sp1_per=100) AND _cc<50 AND _avg_ht<12 THEN 'BTNN'
-           WHEN smr='Wet' AND (sp1='SB' AND _sp1_per=100) AND (_cc >= 50  AND  _cc < 70)  AND _avg_ht >= 12 THEN 'STNN'
-           WHEN smr='Wet' AND (sp1='SB' AND _sp1_per=100) AND _cc >= 70  AND _avg_ht >= 12 THEN 'SFNN'
-           WHEN smr='Wet' AND (sp1='SB' OR sp1='L') AND  (sp2='SB' OR sp2='L') AND _cc <= 50  AND _avg_ht < 12 THEN 'FTNN'
-           WHEN smr='Wet' AND (sp1='SB' OR sp1='L' OR sp1='W') AND (sp2='SB' OR sp2='L' OR sp2='W') AND _cc > 50  AND _avg_ht > 12 THEN 'STNN'
-           WHEN smr='Wet' AND (sp1='L' AND _sp1_per=100) AND _cc <= 50 THEN 'FTNN'
-           WHEN smr='Wet' AND (sp1='L' OR sp1='W') AND _sp1_per=100 AND (_cc > 50  AND _cc < 70) THEN 'STNN'
-           WHEN smr='Wet' AND (sp1='L' OR sp1='W') AND _sp1_per=100 AND (_cc >= 70) THEN 'SFNN'
-           WHEN smr='Wet' THEN 'W---'
-           ELSE NULL
-         END;
-  END
-$$ LANGUAGE plpgsql IMMUTABLE;
--------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- Begin Validation Function Definitions...
 -------------------------------------------------------------------------------
@@ -5097,7 +5054,7 @@ $$ LANGUAGE plpgsql;
 -- If landtype is an NFL type, check the covertype contains an NFL type as well, if so return true
 -- if landtype is vegetated, check if it's cover is one of Shrub types or rock, if so return true
 -- else FALSE
-CREATE OR REPLACE FUNCTION TT_yvi03_hasNFL(
+CREATE OR REPLACE FUNCTION TT_yvi01_hasNFL(
   landtype text,
   covertype text,
   cover_class text,
@@ -5111,17 +5068,21 @@ RETURNS boolean AS $$
     water text[];
     non_veg text[];
   BEGIN
-  	urban = ARRAY['Road Surface', 'Gravel Pit', 'Tailings'];
+  	urban = ARRAY['RD','G','T','Road Surface','Gravel Pit','Tailings'];
     shrub = ARRAY['Tall Shrub', 'Low Shrub', 'Tall Shrub, Open', 'Tall Shrub, Closed', 'Rock'];
     nonveg_land = ARRAY['Non-Vegetated, Water', 'Non-Vegetated, Snow/Ice', 'Non-Vegetated, Exposed Land'];
-    water = ARRAY['River', 'Lake'];
+    water = ARRAY['R','L','River', 'Lake'];
     non_veg = ARRAY['River Sediments', 'Exposed Soil', 'Burned Area', 'Rock & Rubble'];
+    --- matchList({type_lnd, '-', class}  {'NU-RD', 'NU-G', 'NU-T'})
     IF landtype = 'Non-Vegetated, Urban/Industrial' AND covertype = ANY(urban) THEN
       RETURN TRUE;
+    --- matchList({type_lnd, '-', class}, {'VN-S', 'VN-H', 'VN-C', 'VN-M'})
     ELSIF landtype = 'Vegetated, Non-Forested' AND cover_class = ANY(shrub) THEN
       RETURN TRUE;
+    --- matchList({type_lnd, '-', landpos}, {'NW-A', 'NS-A', 'NE-A'});
     ELSIF landpos = 'Alpine' AND landtype = ANY(nonveg_land)  THEN
       RETURN TRUE;
+    --- matchList({type_lnd, '-', class}, {'NW-R', 'NW-L', 'NW-RS', 'NW-E', 'NW-S', 'NW-B', 'NW-RR', 'NS-R', 'NS-L', 'NS-RS', 'NS-E', 'NS-S', 'NS-B', 'NS-RR', 'NE-R', 'NE-L', 'NE-RS', 'NE-E', 'NE-S', 'NE-B', 'NE-RR'})  
     ELSIF landtype = ANY(nonveg_land) AND covertype = ANY(water) THEN
       RETURN TRUE;
     ELSIF landtype = ANY(nonveg_land) AND covertype = ANY(non_veg) THEN
@@ -8588,35 +8549,6 @@ RETURNS text AS $$
     _wetland_code text;
   BEGIN
     _wetland_code = TT_yt_wetland_code(smr, cc, class_, sp1, sp2, sp1_per, avg_ht);
-    IF _wetland_code IS NULL THEN
-      RETURN NULL;
-    END IF;
-    RETURN TT_wetland_code_translation(_wetland_code, retCharPos);
-  END;
-$$ LANGUAGE plpgsql IMMUTABLE;
--------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
--- TT_yt04_wetland_translation
---
--- Assign 4 letter wetland character code and check value matches expected values.
-------------------------------------------------------------
---DROP FUNCTION IF EXISTS TT_yt04_wetland_translation(text, text, text, text,text, text, text, text);
-CREATE OR REPLACE FUNCTION TT_yt04_wetland_translation(
-  smr text,
-  cc text,
-  class_ text,
-  sp1 text,
-  sp2 text,
-  sp1_per text,
-  avg_ht text,
-  retCharPos text
-)
-RETURNS text AS $$
-  DECLARE
-    _wetland_code text;
-  BEGIN
-    _wetland_code = TT_yt04_wetland_string_code(smr, cc, class_, sp1, sp2, sp1_per, avg_ht);
     IF _wetland_code IS NULL THEN
       RETURN NULL;
     END IF;
