@@ -38,5 +38,11 @@ source $thisScriptDir/../pre_conversion.sh
 -sql "SELECT *, '$srcFileName' AS src_filename, '$inventoryID' AS inventory_id FROM $gdbTableName WHERE CZONE NOT LIKE '0'" \
 -progress $overwriteTable
 
+"$gdalFolder/ogrfino" \
+-f PostgreSQL "$gdalConnectionString" "$srcFullPath" "$gdbTableName" \
+-nln $fullTargetTableName $gdalLco $gdalOtherOptions \
+-sql "UPDATE $fullTargetTableName SET np = 3500, u1 = NULL WHERE u1 = 'SB' and np = 0 " \
+-progress $overwriteTable
+
 thisScriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $thisScriptDir/../post_conversion.sh
