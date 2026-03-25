@@ -2153,8 +2153,8 @@ BEGIN
       nbTranslatedLayers := 0;
       ----------------------------------------------------------------------------------------------
       -- Check that table 'inventory_metadata' exists
-      IF NOT TT_TableExists('public', invMetadataTableName) THEN
-        RAISE NOTICE '1.0 - TT_TranslateInventory() ERROR : Could not find table ''public.%''...', invMetadataTableName;
+      IF NOT TT_TableExists(invMetadataSchemaName, invMetadataTableName) THEN
+        RAISE NOTICE '1.0 - TT_TranslateInventory() ERROR : Could not find table ''%.%''...',invMetadataSchemaName, invMetadataTableName;
         RETURN;
       END IF;
     
