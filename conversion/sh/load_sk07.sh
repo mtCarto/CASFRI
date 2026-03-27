@@ -35,7 +35,7 @@ source $thisScriptDir/../pre_conversion.sh
 "$gdalFolder/ogr2ogr" \
 -f PostgreSQL "$gdalConnectionString" "$srcFullPath" "$gdbTableName" \
 -nln $fullTargetTableName $gdalLco $gdalOtherOptions \
--sql "SELECT *, '$srcFileName' AS src_filename, '$inventoryID' AS inventory_id FROM $gdbTableName WHERE CZONE NOT LIKE '0'" \
+-sql "SELECT *, '$srcFileName' AS src_filename, '$inventoryID' AS inventory_id FROM $gdbTableName WHERE CZONE NOT LIKE '0' and ST_Area(wkb_geometry) > 0" \
 -progress $overwriteTable
 
 "$gdalFolder/ogrinfo" \
